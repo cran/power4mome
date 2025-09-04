@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2025-08-31" />
+
+<title>Power Analysis for Moderation, Mediation, and Moderated Mediation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">
+
+div.csl-bib-body { }
+div.csl-entry {
+clear: both;
+margin-bottom: 0em;
+}
+.hanging div.csl-entry {
+margin-left:2em;
+text-indent:-2em;
+}
+div.csl-left-margin {
+min-width:2em;
+float:left;
+}
+div.csl-right-inline {
+margin-left:2em;
+padding-left:1em;
+}
+div.csl-indent {
+margin-left: 2em;
+}
+</style>
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Power Analysis for Moderation, Mediation,
+and Moderated Mediation</h1>
+<h4 class="date">2025-08-31</h4>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This article is a brief illustration of how to use
+<code>power4test()</code> from the package <a href="https://sfcheung.github.io/power4mome/">power4mome</a> to do power
+analysis of mediation, moderation, and moderated mediation in a model to
+be fitted by structural equation modeling using <code>lavaan</code>.</p>
+</div>
+<div id="prerequisite" class="section level1">
+<h1>Prerequisite</h1>
+<p>Basic knowledge about fitting models by <code>lavaan</code> is
+required. Readers are also expected to have basic knowledge of
+mediation, moderation, and/or moderated mediation.</p>
+</div>
+<div id="scope" class="section level1">
+<h1>Scope</h1>
+<p>This is a brief illustration. More complicated scenarios and other
+features of <code>power4mome</code> will be described in other
+vignettes.</p>
+</div>
+<div id="package" class="section level1">
+<h1>Package</h1>
+<p>This introduction only needs the following package:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(power4mome)</span></code></pre></div>
+</div>
+<div id="workflow" class="section level1">
+<h1>Workflow</h1>
+<p>Two functions are sufficient for estimating power given a model,
+population values, sample size, and the test to be used. This is the
+workflow:</p>
+<ol style="list-style-type: decimal">
+<li><p>Specify the model syntax for the population model, in
+<code>lavaan</code> style, and set the population values of the model
+parameters.</p></li>
+<li><p>Call <code>power4test()</code> to examine the setup and the
+datasets generated. Repeat this and previous steps until the model is
+specified correctly.</p></li>
+<li><p>Call <code>power4test()</code> again, with the test to do
+specified.</p></li>
+<li><p>Call <code>rejection_rates()</code> to compute the
+power.</p></li>
+</ol>
+</div>
+<div id="mediation" class="section level1">
+<h1>Mediation</h1>
+<p>Let’s consider a simple mediation model. We would like to estimate
+the power of testing a mediation effect by Monte Carlo confidence
+interval.</p>
+<div id="specify-the-population-model" class="section level2">
+<h2>Specify the Population Model</h2>
+<p>This is the model syntax</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>mod <span class="ot">&lt;-</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="st">m ~ x</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">y ~ m + x</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>Note that, even if we are going to test mediation, moderation, or
+moderated mediation effects, we do not need to add any labels to this
+model. This will be taken care of by the test functions, through the use
+of the package <a href="https://sfcheung.github.io/manymome/"><code>manymome</code></a>
+<span class="citation">(Cheung &amp; Cheung, 2024)</span>.</p>
+</div>
+<div id="es_convention" class="section level2">
+<h2>Specify The Population Values</h2>
+<p>There are two approaches to do this:</p>
+<ul>
+<li><p>Using named vectors or lists.</p></li>
+<li><p>Using a multiline string similar to <code>lavaan</code> model
+syntax.</p></li>
+</ul>
+<p>The second approach is demonstrated below.</p>
+<p>Suppose we want to estimate the power when:</p>
+<ul>
+<li><p>The path from <code>x</code> to <code>m</code> are “large” in
+strength.</p></li>
+<li><p>The path from <code>m</code> to <code>y</code> are “medium” in
+strength.</p></li>
+<li><p>The path from <code>x</code> to <code>m</code> are “small” in
+strength.</p></li>
+</ul>
+<p>By default, <code>power4mome</code> uses this convention for
+regression path and correlation:<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<ul>
+<li><p>Small: .10 (or -.10)</p></li>
+<li><p>Medium: .30 (or -.30)</p></li>
+<li><p>Large: .50 (or -.50)</p></li>
+</ul>
+<p>For a product term in moderation, this is the convention:</p>
+<ul>
+<li><p>Small: .05 (or -.05)</p></li>
+<li><p>Medium: .10 (or -.10)</p></li>
+<li><p>Large: .15 (or -.15)</p></li>
+</ul>
+<p>All these values are for the standardized solution (the correlations
+and so-called “betas”).</p>
+<p>The following string denotes the desired values:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>mod_es <span class="ot">&lt;-</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="st">m ~ x: l</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="st">y ~ m: m</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="st">y ~ x: s</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>Each line starts with a <em>tag</em>, which is the parameter
+presented in <code>lavaan</code> syntax. The tag ends with a colon,
+<code>:</code>.</p>
+<p>After the colon is <em>population value</em>, which can be:</p>
+<ul>
+<li><p>A string denoting the value. By default:</p>
+<ul>
+<li><p><code>s</code>: Small. (<code>-s</code> for small and
+negative.)</p></li>
+<li><p><code>m</code>: Medium. (<code>-m</code> for medium and
+negative.)</p></li>
+<li><p><code>l</code>: Large. (<code>-l</code> for large and
+negative.)</p></li>
+<li><p><code>nil</code>: Zero.</p></li>
+</ul></li>
+</ul>
+<p>All other regression coefficients and covariances, if not specified
+in this string, are set to zero.</p>
+</div>
+<div id="call-power4test-to-check-the-model" class="section level2">
+<h2>Call <code>power4test()</code> to Check the Model</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">2</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                  <span class="at">model =</span> mod,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                  <span class="at">pop_es =</span> mod_es,</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                  <span class="at">n =</span> <span class="dv">50000</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                  <span class="at">iseed =</span> <span class="dv">1234</span>)</span></code></pre></div>
+<p>These are the arguments used:</p>
+<ul>
+<li><p><code>nrep</code>: The number of replications. In this stage, a
+small number can be used. It is more important to have a large sample
+size than to have many replications.</p></li>
+<li><p><code>model</code>: The model syntax.</p></li>
+<li><p><code>pop_es</code>: The string setting the population
+values.</p></li>
+<li><p><code>n</code>: The sample size in each replications. In this
+stage, just for checking the model and the data generation, this number
+can be set to a large value unless the model is slow to fit when the
+sample size is large.</p></li>
+<li><p><code>iseed</code>: If supplied, it is used to set the seed for
+the random number generator. It is advised to always set this to an
+arbitrary integer, to make the results reproducible.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p></li>
+</ul>
+<p>The population values can be shown by printing this object:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>out</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; ====================== Model Information ======================</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co">#&gt; == Model on Factors/Variables ==</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co">#&gt; == Model on Variables/Indicators ==</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co">#&gt; ====== Population Values ======</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#&gt;   m ~                        </span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co">#&gt;     x                 0.500  </span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co">#&gt;   y ~                        </span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co">#&gt;     m                 0.300  </span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#&gt;     x                 0.100  </span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co">#&gt; Variances:</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co">#&gt;    .m                 0.750  </span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#&gt;    .y                 0.870  </span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co">#&gt;     x                 1.000  </span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co">#&gt; (Computing indirect effects for 2 paths ...)</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-33"><a href="#cb5-33" tabindex="-1"></a><span class="co">#&gt; == Population Conditional/Indirect Effect(s) ==</span></span>
+<span id="cb5-34"><a href="#cb5-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-35"><a href="#cb5-35" tabindex="-1"></a><span class="co">#&gt; == Indirect Effect(s) ==</span></span>
+<span id="cb5-36"><a href="#cb5-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-37"><a href="#cb5-37" tabindex="-1"></a><span class="co">#&gt;               ind</span></span>
+<span id="cb5-38"><a href="#cb5-38" tabindex="-1"></a><span class="co">#&gt; x -&gt; m -&gt; y 0.150</span></span>
+<span id="cb5-39"><a href="#cb5-39" tabindex="-1"></a><span class="co">#&gt; x -&gt; y      0.100</span></span>
+<span id="cb5-40"><a href="#cb5-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-41"><a href="#cb5-41" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the indirect effect(s).</span></span>
+<span id="cb5-42"><a href="#cb5-42" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb5-43"><a href="#cb5-43" tabindex="-1"></a><span class="co">#&gt; ======================= Data Information =======================</span></span>
+<span id="cb5-44"><a href="#cb5-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-45"><a href="#cb5-45" tabindex="-1"></a><span class="co">#&gt; Number of Replications:  2 </span></span>
+<span id="cb5-46"><a href="#cb5-46" tabindex="-1"></a><span class="co">#&gt; Sample Sizes:  50000 </span></span>
+<span id="cb5-47"><a href="#cb5-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-48"><a href="#cb5-48" tabindex="-1"></a><span class="co">#&gt; Call print with &#39;data_long = TRUE&#39; for further information.</span></span>
+<span id="cb5-49"><a href="#cb5-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-50"><a href="#cb5-50" tabindex="-1"></a><span class="co">#&gt; ==================== Extra Element(s) Found ====================</span></span>
+<span id="cb5-51"><a href="#cb5-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-52"><a href="#cb5-52" tabindex="-1"></a><span class="co">#&gt; - fit</span></span>
+<span id="cb5-53"><a href="#cb5-53" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-54"><a href="#cb5-54" tabindex="-1"></a><span class="co">#&gt; === Element(s) of the First Dataset ===</span></span>
+<span id="cb5-55"><a href="#cb5-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-56"><a href="#cb5-56" tabindex="-1"></a><span class="co">#&gt; ============ &lt;fit&gt; ============</span></span>
+<span id="cb5-57"><a href="#cb5-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-58"><a href="#cb5-58" tabindex="-1"></a><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span id="cb5-59"><a href="#cb5-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-60"><a href="#cb5-60" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb5-61"><a href="#cb5-61" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb5-62"><a href="#cb5-62" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span id="cb5-63"><a href="#cb5-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-64"><a href="#cb5-64" tabindex="-1"></a><span class="co">#&gt;   Number of observations                         50000</span></span>
+<span id="cb5-65"><a href="#cb5-65" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-66"><a href="#cb5-66" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb5-67"><a href="#cb5-67" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb5-68"><a href="#cb5-68" tabindex="-1"></a><span class="co">#&gt;   Test statistic                                 0.000</span></span>
+<span id="cb5-69"><a href="#cb5-69" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                 0</span></span></code></pre></div>
+<p>By default, the population model will be fitted to each dataset,
+hence the section <code>&lt;fit&gt;</code>. Perfect fit is expected if
+the population model is a saturated model.</p>
+<p>We check the section <code>Population Values</code> to see whether
+the values are what we expected.</p>
+<ul>
+<li>In this example, the population values for the regression paths are
+what we specified.</li>
+</ul>
+<p>If they are different from what we expect, check the string for
+<code>pop_es</code> to see whether we set the population values
+correctly.</p>
+<p>If necessary, we can check the data generation by adding
+<code>data_long = TRUE</code> when printing the output:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">print</span>(out,</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>      <span class="at">data_long =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="co">#&gt; ====================== Model Information ======================</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="co">#&gt; == Model on Factors/Variables ==</span></span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">#&gt; == Model on Variables/Indicators ==</span></span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">#&gt; ====== Population Values ======</span></span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a><span class="co">#&gt;   m ~                        </span></span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="co">#&gt;     x                 0.500  </span></span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a><span class="co">#&gt;   y ~                        </span></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a><span class="co">#&gt;     m                 0.300  </span></span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="co">#&gt;     x                 0.100  </span></span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="co">#&gt; Variances:</span></span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a><span class="co">#&gt;    .m                 0.750  </span></span>
+<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a><span class="co">#&gt;    .y                 0.870  </span></span>
+<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a><span class="co">#&gt;     x                 1.000  </span></span>
+<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a><span class="co">#&gt; (Computing indirect effects for 2 paths ...)</span></span>
+<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a><span class="co">#&gt; == Population Conditional/Indirect Effect(s) ==</span></span>
+<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a><span class="co">#&gt; == Indirect Effect(s) ==</span></span>
+<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-38"><a href="#cb6-38" tabindex="-1"></a><span class="co">#&gt;               ind</span></span>
+<span id="cb6-39"><a href="#cb6-39" tabindex="-1"></a><span class="co">#&gt; x -&gt; m -&gt; y 0.150</span></span>
+<span id="cb6-40"><a href="#cb6-40" tabindex="-1"></a><span class="co">#&gt; x -&gt; y      0.100</span></span>
+<span id="cb6-41"><a href="#cb6-41" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-42"><a href="#cb6-42" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the indirect effect(s).</span></span>
+<span id="cb6-43"><a href="#cb6-43" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb6-44"><a href="#cb6-44" tabindex="-1"></a><span class="co">#&gt; ======================= Data Information =======================</span></span>
+<span id="cb6-45"><a href="#cb6-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-46"><a href="#cb6-46" tabindex="-1"></a><span class="co">#&gt; Number of Replications:  2 </span></span>
+<span id="cb6-47"><a href="#cb6-47" tabindex="-1"></a><span class="co">#&gt; Sample Sizes:  50000 </span></span>
+<span id="cb6-48"><a href="#cb6-48" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-49"><a href="#cb6-49" tabindex="-1"></a><span class="co">#&gt; ==== Descriptive Statistics ====</span></span>
+<span id="cb6-50"><a href="#cb6-50" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-51"><a href="#cb6-51" tabindex="-1"></a><span class="co">#&gt;   vars     n mean sd skew kurtosis se</span></span>
+<span id="cb6-52"><a href="#cb6-52" tabindex="-1"></a><span class="co">#&gt; m    1 1e+05 0.00  1 0.01     0.03  0</span></span>
+<span id="cb6-53"><a href="#cb6-53" tabindex="-1"></a><span class="co">#&gt; y    2 1e+05 0.01  1 0.01     0.00  0</span></span>
+<span id="cb6-54"><a href="#cb6-54" tabindex="-1"></a><span class="co">#&gt; x    3 1e+05 0.00  1 0.01     0.01  0</span></span>
+<span id="cb6-55"><a href="#cb6-55" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-56"><a href="#cb6-56" tabindex="-1"></a><span class="co">#&gt; ===== Parameter Estimates Based on All 2 Samples Combined =====</span></span>
+<span id="cb6-57"><a href="#cb6-57" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-58"><a href="#cb6-58" tabindex="-1"></a><span class="co">#&gt; Total Sample Size: 100000 </span></span>
+<span id="cb6-59"><a href="#cb6-59" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-60"><a href="#cb6-60" tabindex="-1"></a><span class="co">#&gt; ==== Standardized Estimates ====</span></span>
+<span id="cb6-61"><a href="#cb6-61" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-62"><a href="#cb6-62" tabindex="-1"></a><span class="co">#&gt; Variances and error variances omitted.</span></span>
+<span id="cb6-63"><a href="#cb6-63" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-64"><a href="#cb6-64" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb6-65"><a href="#cb6-65" tabindex="-1"></a><span class="co">#&gt;                     est.std</span></span>
+<span id="cb6-66"><a href="#cb6-66" tabindex="-1"></a><span class="co">#&gt;   m ~                      </span></span>
+<span id="cb6-67"><a href="#cb6-67" tabindex="-1"></a><span class="co">#&gt;     x                 0.500</span></span>
+<span id="cb6-68"><a href="#cb6-68" tabindex="-1"></a><span class="co">#&gt;   y ~                      </span></span>
+<span id="cb6-69"><a href="#cb6-69" tabindex="-1"></a><span class="co">#&gt;     m                 0.295</span></span>
+<span id="cb6-70"><a href="#cb6-70" tabindex="-1"></a><span class="co">#&gt;     x                 0.102</span></span>
+<span id="cb6-71"><a href="#cb6-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-72"><a href="#cb6-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-73"><a href="#cb6-73" tabindex="-1"></a><span class="co">#&gt; ==================== Extra Element(s) Found ====================</span></span>
+<span id="cb6-74"><a href="#cb6-74" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-75"><a href="#cb6-75" tabindex="-1"></a><span class="co">#&gt; - fit</span></span>
+<span id="cb6-76"><a href="#cb6-76" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-77"><a href="#cb6-77" tabindex="-1"></a><span class="co">#&gt; === Element(s) of the First Dataset ===</span></span>
+<span id="cb6-78"><a href="#cb6-78" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-79"><a href="#cb6-79" tabindex="-1"></a><span class="co">#&gt; ============ &lt;fit&gt; ============</span></span>
+<span id="cb6-80"><a href="#cb6-80" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-81"><a href="#cb6-81" tabindex="-1"></a><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span id="cb6-82"><a href="#cb6-82" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-83"><a href="#cb6-83" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb6-84"><a href="#cb6-84" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb6-85"><a href="#cb6-85" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span id="cb6-86"><a href="#cb6-86" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-87"><a href="#cb6-87" tabindex="-1"></a><span class="co">#&gt;   Number of observations                         50000</span></span>
+<span id="cb6-88"><a href="#cb6-88" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-89"><a href="#cb6-89" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb6-90"><a href="#cb6-90" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb6-91"><a href="#cb6-91" tabindex="-1"></a><span class="co">#&gt;   Test statistic                                 0.000</span></span>
+<span id="cb6-92"><a href="#cb6-92" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                 0</span></span></code></pre></div>
+<p>The section <code>Descriptive Statistics</code>, generated by
+<code>psych::describe()</code>, shows basic descriptive statistics for
+the observed variables. As expected, they have means close to zero and
+standard deviations close to one, because the datasets were generated
+using the standardized model.</p>
+<p>The section <code>Parameter Estimates Based on</code> shows the
+parameter estimates when the <em>population model</em> is fitted to
+<em>all the datasets combined</em>. When the total sample size is large,
+these estimates should be close to the population values.</p>
+<p>The results show that we have specified the population model
+correctly. We can proceed to specify the test and estimate the
+power.</p>
+</div>
+<div id="med_power" class="section level2">
+<h2>Call <code>power4test()</code> to Do the Target Test</h2>
+<p>We can now do the simulation to estimate power. A large number of
+datasets (e.g., 500) of the target sample size are to be generated, and
+then the target test will be conducted in each of these datasets.</p>
+<p>Suppose we would like to estimate the power of using Monte Carlo
+confidence intervals to test the indirect effect from <code>x</code> to
+<code>y</code> through <code>m</code>, when sample size is 50. This is
+the call:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">400</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                  <span class="at">model =</span> mod,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                  <span class="at">pop_es =</span> mod_es,</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>                  <span class="at">n =</span> <span class="dv">50</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>                  <span class="at">R =</span> <span class="dv">2000</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                  <span class="at">ci_type =</span> <span class="st">&quot;mc&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                  <span class="at">test_fun =</span> test_indirect_effect,</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>                  <span class="at">test_args =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>                                   <span class="at">m =</span> <span class="st">&quot;m&quot;</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>                                   <span class="at">y =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>                                   <span class="at">mc_ci =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>                  <span class="at">iseed =</span> <span class="dv">1234</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>                  <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>These are the new arguments used:</p>
+<ul>
+<li><p><code>R</code>: The number of replications used to generate the
+Monte Carlo simulated estimates, 2000 in this example. In real studies,
+this number should be 10000 or even 20000 for Monte Carlo confidence
+intervals. However, 2000 is sufficient because the goal is to estimate
+power by generating many intervals, rather than to have one single
+stable interval.</p></li>
+<li><p><code>ci_type</code>: The method used to generate estimates.
+Support both Monte Carlo (<code>&quot;mc&quot;</code>) and nonparametric
+bootstrapping (<code>&quot;boot&quot;</code>).<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> Although bootstrapping is usually used to
+test an indirect effect, it is very slow to do <code>R</code>
+bootstrapping in <code>nrep</code> datasets (the model will be fitted
+<code>R * nrep</code> times). Therefore, it is preferable to use Monte
+Carlo confidence intervals to do the initial estimation.</p></li>
+<li><p><code>test_fun</code>: The function to be used to do the test for
+each replication. Any function following a specific requirement can be
+used, and <code>power4mome</code> comes with several built-in functions
+for some common tests. The function <code>test_indirect_effect()</code>
+is used to test an indirect effect in the model.</p></li>
+<li><p><code>test_args</code>: A named list of arguments to be supplied
+to <code>test_fun</code>. For <code>test_indirect_effect()</code>, it is
+a named list specifying the predictor (<code>x</code>), the mediator(s)
+(<code>m</code>), and the outcome (<code>y</code>). A path with any
+number of mediators can be supported. Please refer to the help page of
+<code>test_indirect_effect()</code>.<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p></li>
+<li><p><code>parallel</code>: If the test to be conducted is slow, which
+is the case for tests done by Monte Carlo or nonparametric bootstrapping
+confidence intervals, it is advised to enable parallel processing by
+setting <code>parallel</code> to <code>TRUE</code>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a></p></li>
+</ul>
+<p>For <code>nrep = 400</code>, the 95% confidence limits for a power of
+.80 are about .04 below and above .80. This should be precise enough for
+determining whether a sample size has sufficient power.</p>
+<p>This is the default printout:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>out</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; ====================== Model Information ======================</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co">#&gt; == Model on Factors/Variables ==</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co">#&gt; == Model on Variables/Indicators ==</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="co">#&gt; m ~ x</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co">#&gt; ====== Population Values ======</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a><span class="co">#&gt;   m ~                        </span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a><span class="co">#&gt;     x                 0.500  </span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a><span class="co">#&gt;   y ~                        </span></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a><span class="co">#&gt;     m                 0.300  </span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a><span class="co">#&gt;     x                 0.100  </span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a><span class="co">#&gt; Variances:</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a><span class="co">#&gt;    .m                 0.750  </span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a><span class="co">#&gt;    .y                 0.870  </span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a><span class="co">#&gt;     x                 1.000  </span></span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a><span class="co">#&gt; (Computing indirect effects for 2 paths ...)</span></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a><span class="co">#&gt; == Population Conditional/Indirect Effect(s) ==</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a><span class="co">#&gt; == Indirect Effect(s) ==</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-37"><a href="#cb8-37" tabindex="-1"></a><span class="co">#&gt;               ind</span></span>
+<span id="cb8-38"><a href="#cb8-38" tabindex="-1"></a><span class="co">#&gt; x -&gt; m -&gt; y 0.150</span></span>
+<span id="cb8-39"><a href="#cb8-39" tabindex="-1"></a><span class="co">#&gt; x -&gt; y      0.100</span></span>
+<span id="cb8-40"><a href="#cb8-40" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-41"><a href="#cb8-41" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the indirect effect(s).</span></span>
+<span id="cb8-42"><a href="#cb8-42" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb8-43"><a href="#cb8-43" tabindex="-1"></a><span class="co">#&gt; ======================= Data Information =======================</span></span>
+<span id="cb8-44"><a href="#cb8-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-45"><a href="#cb8-45" tabindex="-1"></a><span class="co">#&gt; Number of Replications:  400 </span></span>
+<span id="cb8-46"><a href="#cb8-46" tabindex="-1"></a><span class="co">#&gt; Sample Sizes:  50 </span></span>
+<span id="cb8-47"><a href="#cb8-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-48"><a href="#cb8-48" tabindex="-1"></a><span class="co">#&gt; Call print with &#39;data_long = TRUE&#39; for further information.</span></span>
+<span id="cb8-49"><a href="#cb8-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-50"><a href="#cb8-50" tabindex="-1"></a><span class="co">#&gt; ==================== Extra Element(s) Found ====================</span></span>
+<span id="cb8-51"><a href="#cb8-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-52"><a href="#cb8-52" tabindex="-1"></a><span class="co">#&gt; - fit</span></span>
+<span id="cb8-53"><a href="#cb8-53" tabindex="-1"></a><span class="co">#&gt; - mc_out</span></span>
+<span id="cb8-54"><a href="#cb8-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-55"><a href="#cb8-55" tabindex="-1"></a><span class="co">#&gt; === Element(s) of the First Dataset ===</span></span>
+<span id="cb8-56"><a href="#cb8-56" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-57"><a href="#cb8-57" tabindex="-1"></a><span class="co">#&gt; ============ &lt;fit&gt; ============</span></span>
+<span id="cb8-58"><a href="#cb8-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-59"><a href="#cb8-59" tabindex="-1"></a><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span id="cb8-60"><a href="#cb8-60" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-61"><a href="#cb8-61" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb8-62"><a href="#cb8-62" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb8-63"><a href="#cb8-63" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span id="cb8-64"><a href="#cb8-64" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-65"><a href="#cb8-65" tabindex="-1"></a><span class="co">#&gt;   Number of observations                            50</span></span>
+<span id="cb8-66"><a href="#cb8-66" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-67"><a href="#cb8-67" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb8-68"><a href="#cb8-68" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb8-69"><a href="#cb8-69" tabindex="-1"></a><span class="co">#&gt;   Test statistic                                 0.000</span></span>
+<span id="cb8-70"><a href="#cb8-70" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                 0</span></span>
+<span id="cb8-71"><a href="#cb8-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-72"><a href="#cb8-72" tabindex="-1"></a><span class="co">#&gt; =========== &lt;mc_out&gt; ===========</span></span>
+<span id="cb8-73"><a href="#cb8-73" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-74"><a href="#cb8-74" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-75"><a href="#cb8-75" tabindex="-1"></a><span class="co">#&gt; == A &#39;mc_out&#39; class object ==</span></span>
+<span id="cb8-76"><a href="#cb8-76" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-77"><a href="#cb8-77" tabindex="-1"></a><span class="co">#&gt; Number of Monte Carlo replications: 2000 </span></span>
+<span id="cb8-78"><a href="#cb8-78" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-79"><a href="#cb8-79" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-80"><a href="#cb8-80" tabindex="-1"></a><span class="co">#&gt; ====================== Test(s) Conducted ======================</span></span>
+<span id="cb8-81"><a href="#cb8-81" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-82"><a href="#cb8-82" tabindex="-1"></a><span class="co">#&gt; - test_indirect: x-&gt;m-&gt;y</span></span>
+<span id="cb8-83"><a href="#cb8-83" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb8-84"><a href="#cb8-84" tabindex="-1"></a><span class="co">#&gt; Call print() and set &#39;test_long = TRUE&#39; for a detailed report.</span></span></code></pre></div>
+<p>If <code>test_long = TRUE</code> is added when printing the output by
+<code>print()</code>, a summary of the test will also be printed.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">print</span>(out,</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>      <span class="at">test_long =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The summary of the test:</p>
+<pre><code>#&gt;                                                       
+#&gt;   Test statistic                                 0.000
+#&gt;   Degrees of freedom                                 0
+#&gt; 
+#&gt; =========== &lt;mc_out&gt; ===========
+#&gt; 
+#&gt; 
+#&gt; == A &#39;mc_out&#39; class object ==
+#&gt; 
+#&gt; Number of Monte Carlo replications: 2000</code></pre>
+<p>The mean of the estimates across all the replications is 0.152, close
+to the population value.</p>
+</div>
+<div id="compute-the-power" class="section level2">
+<h2>Compute the Power</h2>
+<p>The power estimate is simply the proportion of significant results,
+the <em>rejection</em> <em>rate</em>, because the null hypothesis is
+false. In addition to using <code>test_long = TRUE</code> in
+<code>print()</code>, the rejection rate can also be retrieved by
+<code>rejection_rates()</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>out_power <span class="ot">&lt;-</span> <span class="fu">rejection_rates</span>(out)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>out_power</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co">#&gt; [test]: test_indirect: x-&gt;m-&gt;y </span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="co">#&gt; [test_label]: Test </span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="co">#&gt;     est   p.v reject r.cilo r.cihi</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt; 1 0.152 1.000  0.468  0.419  0.516</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; Notes:</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; - p.v: The proportion of valid replications.</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; - est: The mean of the estimates in a test across replications.</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; - reject: The proportion of &#39;significant&#39; replications, that is, the</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt;   rejection rate. If the null hypothesis is true, this is the Type I</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt;   error rate. If the null hypothesis is false, this is the power.</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; - r.cilo,r.cihi: The confidence interval of the rejection rate, based</span></span>
+<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a><span class="co">#&gt;   on normal approximation.</span></span>
+<span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a><span class="co">#&gt; - Refer to the tests for the meanings of other columns.</span></span></code></pre></div>
+<p>In the example above, the estimated power of the test of the indirect
+effect, conducted by Monte Carlo confidence intervals, is 0.468, under
+the column <code>reject</code>.</p>
+<p><code>p.v</code> is the proportion of valid results across
+replications. <code>1.000</code> means that the test conducted normally
+in all replications.</p>
+<p>By default, the 95% confidence interval of the rejection rate (power)
+based on normal approximation is also printed, under the column
+<code>r.cilo</code> and <code>r.cihi</code>. In this example, the 95%
+confidence interval is [0.419; 0.516].</p>
+</div>
+</div>
+<div id="moderation" class="section level1">
+<h1>Moderation</h1>
+<p>Let’s consider a moderation model, with some control variables.</p>
+<div id="pop_es_xw" class="section level2">
+<h2>Specify the Population Model and Values</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="st">y ~ x + w + x:w + control</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>This model has only moderation, with the predictor <code>x</code> and
+the moderator <code>w</code>. The product term is included in the
+<code>lavaan</code> style, <code>x:w</code>.</p>
+<p>It is unrealistic to specific the population values for all control
+variables. Therefore, we can just add a <em>proxy</em>,
+<code>control</code> to represent the <em>set of control variables</em>
+that may be included.</p>
+<p>This is the syntax for the population values:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>mod2_es <span class="ot">&lt;-</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="st">.beta.: s</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="st">x ~~ control: s</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="st">y ~ control: s</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="st">y ~ x:w: l</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>This example introduces one useful tag, <code>.beta.</code> For a
+model with many paths, it is inconvenient to specify all of them
+manually. The tag <code>.beta.</code> specifies the <em>default
+value</em> for <em>all regression paths not specified explicitly</em>,
+which is small (.10) in this example. If a path is explicitly included
+(such as <code>y ~ control</code> and <code>y ~ x:w</code>), the
+manually specified value will be used instead of
+<code>.beta.</code>.</p>
+<p>This example also illustrates that we can set the population values
+for <em>correlations</em> (covariances in the standardized solution).
+Control variables are included usually because they may correlate with
+the predictors. Therefore, in this example, it is hypothesized that
+there is a small correlation between <code>x</code> and the proxy
+control variable (<code>x ~~ control: s</code>).</p>
+<p>Last, recall from <a href="#es_convention">this section</a> that the
+convention for product term values is different: <code>l</code> denotes
+.15 for product terms.</p>
+</div>
+<div id="call-power4test-to-check-the-model-1" class="section level2">
+<h2>Call <code>power4test()</code> to Check the Model</h2>
+<p>We check the model first:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">2</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>                   <span class="at">model =</span> mod2,</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>                   <span class="at">pop_es =</span> mod2_es,</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>                   <span class="at">n =</span> <span class="dv">50000</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>                   <span class="at">iseed =</span> <span class="dv">1234</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">print</span>(out2,</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>      <span class="at">data_long =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; ====================== Model Information ======================</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; == Model on Factors/Variables ==</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a><span class="co">#&gt; y ~ x + w + x:w + control</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a><span class="co">#&gt; == Model on Variables/Indicators ==</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a><span class="co">#&gt; y ~ x + w + x:w + control</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="co">#&gt; ====== Population Values ======</span></span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a><span class="co">#&gt;   y ~                        </span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a><span class="co">#&gt;     x                 0.100  </span></span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a><span class="co">#&gt;     w                 0.100  </span></span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="co">#&gt;     x:w               0.150  </span></span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a><span class="co">#&gt;     control           0.100  </span></span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a><span class="co">#&gt; Covariances:</span></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a><span class="co">#&gt;   x ~~                       </span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a><span class="co">#&gt;     w                 0.000  </span></span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a><span class="co">#&gt;     x:w               0.000  </span></span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="co">#&gt;     control           0.100  </span></span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a><span class="co">#&gt;   w ~~                       </span></span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="co">#&gt;     x:w               0.000  </span></span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a><span class="co">#&gt;     control           0.000  </span></span>
+<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a><span class="co">#&gt;   x:w ~~                     </span></span>
+<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a><span class="co">#&gt;     control           0.000  </span></span>
+<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a><span class="co">#&gt; Variances:</span></span>
+<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a><span class="co">#&gt;    .y                 0.945  </span></span>
+<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a><span class="co">#&gt;     x                 1.000  </span></span>
+<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a><span class="co">#&gt;     w                 1.000  </span></span>
+<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a><span class="co">#&gt;     x:w               1.000  </span></span>
+<span id="cb15-42"><a href="#cb15-42" tabindex="-1"></a><span class="co">#&gt;     control           1.000  </span></span>
+<span id="cb15-43"><a href="#cb15-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-44"><a href="#cb15-44" tabindex="-1"></a><span class="co">#&gt; (Computing indirect effects for 1 paths ...)</span></span>
+<span id="cb15-45"><a href="#cb15-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-46"><a href="#cb15-46" tabindex="-1"></a><span class="co">#&gt; (Computing conditional effects for 2 paths ...)</span></span>
+<span id="cb15-47"><a href="#cb15-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-48"><a href="#cb15-48" tabindex="-1"></a><span class="co">#&gt; == Population Conditional/Indirect Effect(s) ==</span></span>
+<span id="cb15-49"><a href="#cb15-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-50"><a href="#cb15-50" tabindex="-1"></a><span class="co">#&gt; == Effect(s) ==</span></span>
+<span id="cb15-51"><a href="#cb15-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-52"><a href="#cb15-52" tabindex="-1"></a><span class="co">#&gt;                ind</span></span>
+<span id="cb15-53"><a href="#cb15-53" tabindex="-1"></a><span class="co">#&gt; control -&gt; y 0.100</span></span>
+<span id="cb15-54"><a href="#cb15-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-55"><a href="#cb15-55" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the effect(s).</span></span>
+<span id="cb15-56"><a href="#cb15-56" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb15-57"><a href="#cb15-57" tabindex="-1"></a><span class="co">#&gt; == Conditional effects ==</span></span>
+<span id="cb15-58"><a href="#cb15-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-59"><a href="#cb15-59" tabindex="-1"></a><span class="co">#&gt;  Path: x -&gt; y</span></span>
+<span id="cb15-60"><a href="#cb15-60" tabindex="-1"></a><span class="co">#&gt;  Conditional on moderator(s): w</span></span>
+<span id="cb15-61"><a href="#cb15-61" tabindex="-1"></a><span class="co">#&gt;  Moderator(s) represented by: w</span></span>
+<span id="cb15-62"><a href="#cb15-62" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-63"><a href="#cb15-63" tabindex="-1"></a><span class="co">#&gt;       [w] (w)    ind</span></span>
+<span id="cb15-64"><a href="#cb15-64" tabindex="-1"></a><span class="co">#&gt; 1 M+1.0SD   1  0.250</span></span>
+<span id="cb15-65"><a href="#cb15-65" tabindex="-1"></a><span class="co">#&gt; 2 Mean      0  0.100</span></span>
+<span id="cb15-66"><a href="#cb15-66" tabindex="-1"></a><span class="co">#&gt; 3 M-1.0SD  -1 -0.050</span></span>
+<span id="cb15-67"><a href="#cb15-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-68"><a href="#cb15-68" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the conditional effects.</span></span>
+<span id="cb15-69"><a href="#cb15-69" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb15-70"><a href="#cb15-70" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-71"><a href="#cb15-71" tabindex="-1"></a><span class="co">#&gt; == Conditional effects ==</span></span>
+<span id="cb15-72"><a href="#cb15-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-73"><a href="#cb15-73" tabindex="-1"></a><span class="co">#&gt;  Path: w -&gt; y</span></span>
+<span id="cb15-74"><a href="#cb15-74" tabindex="-1"></a><span class="co">#&gt;  Conditional on moderator(s): x</span></span>
+<span id="cb15-75"><a href="#cb15-75" tabindex="-1"></a><span class="co">#&gt;  Moderator(s) represented by: x</span></span>
+<span id="cb15-76"><a href="#cb15-76" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-77"><a href="#cb15-77" tabindex="-1"></a><span class="co">#&gt;       [x] (x)    ind</span></span>
+<span id="cb15-78"><a href="#cb15-78" tabindex="-1"></a><span class="co">#&gt; 1 M+1.0SD   1  0.250</span></span>
+<span id="cb15-79"><a href="#cb15-79" tabindex="-1"></a><span class="co">#&gt; 2 Mean      0  0.100</span></span>
+<span id="cb15-80"><a href="#cb15-80" tabindex="-1"></a><span class="co">#&gt; 3 M-1.0SD  -1 -0.050</span></span>
+<span id="cb15-81"><a href="#cb15-81" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-82"><a href="#cb15-82" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the conditional effects.</span></span>
+<span id="cb15-83"><a href="#cb15-83" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb15-84"><a href="#cb15-84" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-85"><a href="#cb15-85" tabindex="-1"></a><span class="co">#&gt; ======================= Data Information =======================</span></span>
+<span id="cb15-86"><a href="#cb15-86" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-87"><a href="#cb15-87" tabindex="-1"></a><span class="co">#&gt; Number of Replications:  2 </span></span>
+<span id="cb15-88"><a href="#cb15-88" tabindex="-1"></a><span class="co">#&gt; Sample Sizes:  50000 </span></span>
+<span id="cb15-89"><a href="#cb15-89" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-90"><a href="#cb15-90" tabindex="-1"></a><span class="co">#&gt; ==== Descriptive Statistics ====</span></span>
+<span id="cb15-91"><a href="#cb15-91" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-92"><a href="#cb15-92" tabindex="-1"></a><span class="co">#&gt;         vars     n mean sd  skew kurtosis se</span></span>
+<span id="cb15-93"><a href="#cb15-93" tabindex="-1"></a><span class="co">#&gt; y          1 1e+05 0.00  1  0.02     0.01  0</span></span>
+<span id="cb15-94"><a href="#cb15-94" tabindex="-1"></a><span class="co">#&gt; x          2 1e+05 0.00  1  0.01     0.01  0</span></span>
+<span id="cb15-95"><a href="#cb15-95" tabindex="-1"></a><span class="co">#&gt; w          3 1e+05 0.00  1  0.00    -0.02  0</span></span>
+<span id="cb15-96"><a href="#cb15-96" tabindex="-1"></a><span class="co">#&gt; x:w        4 1e+05 0.00  1 -0.03     6.01  0</span></span>
+<span id="cb15-97"><a href="#cb15-97" tabindex="-1"></a><span class="co">#&gt; control    5 1e+05 0.01  1  0.00     0.00  0</span></span>
+<span id="cb15-98"><a href="#cb15-98" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-99"><a href="#cb15-99" tabindex="-1"></a><span class="co">#&gt; ===== Parameter Estimates Based on All 2 Samples Combined =====</span></span>
+<span id="cb15-100"><a href="#cb15-100" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-101"><a href="#cb15-101" tabindex="-1"></a><span class="co">#&gt; Total Sample Size: 100000 </span></span>
+<span id="cb15-102"><a href="#cb15-102" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-103"><a href="#cb15-103" tabindex="-1"></a><span class="co">#&gt; ==== Standardized Estimates ====</span></span>
+<span id="cb15-104"><a href="#cb15-104" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-105"><a href="#cb15-105" tabindex="-1"></a><span class="co">#&gt; Variances and error variances omitted.</span></span>
+<span id="cb15-106"><a href="#cb15-106" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-107"><a href="#cb15-107" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb15-108"><a href="#cb15-108" tabindex="-1"></a><span class="co">#&gt;                     est.std</span></span>
+<span id="cb15-109"><a href="#cb15-109" tabindex="-1"></a><span class="co">#&gt;   y ~                      </span></span>
+<span id="cb15-110"><a href="#cb15-110" tabindex="-1"></a><span class="co">#&gt;     x                 0.097</span></span>
+<span id="cb15-111"><a href="#cb15-111" tabindex="-1"></a><span class="co">#&gt;     w                 0.104</span></span>
+<span id="cb15-112"><a href="#cb15-112" tabindex="-1"></a><span class="co">#&gt;     x:w               0.152</span></span>
+<span id="cb15-113"><a href="#cb15-113" tabindex="-1"></a><span class="co">#&gt;     control           0.099</span></span>
+<span id="cb15-114"><a href="#cb15-114" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-115"><a href="#cb15-115" tabindex="-1"></a><span class="co">#&gt; Covariances:</span></span>
+<span id="cb15-116"><a href="#cb15-116" tabindex="-1"></a><span class="co">#&gt;                     est.std</span></span>
+<span id="cb15-117"><a href="#cb15-117" tabindex="-1"></a><span class="co">#&gt;   x ~~                     </span></span>
+<span id="cb15-118"><a href="#cb15-118" tabindex="-1"></a><span class="co">#&gt;     w                -0.003</span></span>
+<span id="cb15-119"><a href="#cb15-119" tabindex="-1"></a><span class="co">#&gt;     x:w               0.002</span></span>
+<span id="cb15-120"><a href="#cb15-120" tabindex="-1"></a><span class="co">#&gt;     control           0.101</span></span>
+<span id="cb15-121"><a href="#cb15-121" tabindex="-1"></a><span class="co">#&gt;   w ~~                     </span></span>
+<span id="cb15-122"><a href="#cb15-122" tabindex="-1"></a><span class="co">#&gt;     x:w              -0.004</span></span>
+<span id="cb15-123"><a href="#cb15-123" tabindex="-1"></a><span class="co">#&gt;     control           0.001</span></span>
+<span id="cb15-124"><a href="#cb15-124" tabindex="-1"></a><span class="co">#&gt;   x:w ~~                   </span></span>
+<span id="cb15-125"><a href="#cb15-125" tabindex="-1"></a><span class="co">#&gt;     control           0.004</span></span>
+<span id="cb15-126"><a href="#cb15-126" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-127"><a href="#cb15-127" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-128"><a href="#cb15-128" tabindex="-1"></a><span class="co">#&gt; ==================== Extra Element(s) Found ====================</span></span>
+<span id="cb15-129"><a href="#cb15-129" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-130"><a href="#cb15-130" tabindex="-1"></a><span class="co">#&gt; - fit</span></span>
+<span id="cb15-131"><a href="#cb15-131" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-132"><a href="#cb15-132" tabindex="-1"></a><span class="co">#&gt; === Element(s) of the First Dataset ===</span></span>
+<span id="cb15-133"><a href="#cb15-133" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-134"><a href="#cb15-134" tabindex="-1"></a><span class="co">#&gt; ============ &lt;fit&gt; ============</span></span>
+<span id="cb15-135"><a href="#cb15-135" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-136"><a href="#cb15-136" tabindex="-1"></a><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span id="cb15-137"><a href="#cb15-137" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-138"><a href="#cb15-138" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb15-139"><a href="#cb15-139" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb15-140"><a href="#cb15-140" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                         5</span></span>
+<span id="cb15-141"><a href="#cb15-141" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-142"><a href="#cb15-142" tabindex="-1"></a><span class="co">#&gt;   Number of observations                         50000</span></span>
+<span id="cb15-143"><a href="#cb15-143" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb15-144"><a href="#cb15-144" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb15-145"><a href="#cb15-145" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb15-146"><a href="#cb15-146" tabindex="-1"></a><span class="co">#&gt;   Test statistic                                 0.000</span></span>
+<span id="cb15-147"><a href="#cb15-147" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                 0</span></span></code></pre></div>
+<p>The population values for the regression paths are what we specified,
+and the estimates based on 5 × 10<sup>4</sup> by 2 or 100000 support
+that the dataset were generated correctly.</p>
+<p>NOTE: If a product term is involved, and the component terms
+(<code>x</code> and <code>w</code> in this example) are correlated, the
+population standard deviation of this product term may not be equal to
+one <span class="citation">(Bohrnstedt &amp; Goldberger, 1969)</span>.
+Therefore, the model can be specified correctly even if the standard
+deviations of product terms in the section
+<code>Descriptive Statistics</code> are not close to one.</p>
+</div>
+<div id="call-power4test-to-test-the-moderation-effect" class="section level2">
+<h2>Call <code>power4test()</code> to Test The Moderation Effect</h2>
+<p>We can now do the simulation to estimate power. In this simple model,
+the test is just a test of the product term, <code>x:w</code>. This
+model can be fitted by linear regression using <code>lm()</code>. Let’s
+estimate the power when the sample size is 50 and the model is fitted by
+<code>lm()</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>out2 <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">400</span>,</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                   <span class="at">model =</span> mod2,</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                   <span class="at">pop_es =</span> mod2_es,</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>                   <span class="at">n =</span> <span class="dv">100</span>,</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>                   <span class="at">fit_model_args =</span> <span class="fu">list</span>(<span class="at">fit_function =</span> <span class="st">&quot;lm&quot;</span>),</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>                   <span class="at">test_fun =</span> test_moderation,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>                   <span class="at">iseed =</span> <span class="dv">1234</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>                   <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>These are the new arguments used:</p>
+<ul>
+<li><p><code>fit_model_args</code>: This named list stores additional
+arguments for <code>fit_model()</code>. By default,
+<code>lavaan::sem()</code> is used. To fit the model by linear
+regression using <code>lm()</code>, add <code>fit_function = &quot;lm&quot;</code>
+to the list.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a></p></li>
+<li><p><code>test_fun</code>: It is set to <code>test_moderation</code>,
+provided by <code>power4mome</code>. This function automatically
+identifies all product terms in a model and test them. The test used
+depends on method used to fit the model. If <code>lm()</code> is used,
+then the usual <em>t</em> test is used.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a></p></li>
+</ul>
+</div>
+<div id="compute-the-power-1" class="section level2">
+<h2>Compute the Power</h2>
+<p>We can ues <code>rejection_rates()</code> again to estimate the
+power:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>out2_power <span class="ot">&lt;-</span> <span class="fu">rejection_rates</span>(out2)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>out2_power</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="co">#&gt; [test]: test_moderation: CIs  </span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [test_label]: y~x:w </span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="co">#&gt;     est   p.v reject r.cilo r.cihi</span></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="co">#&gt; 1 0.158 1.000  0.347  0.301  0.394</span></span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; Notes:</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="co">#&gt; - p.v: The proportion of valid replications.</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; - est: The mean of the estimates in a test across replications.</span></span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="co">#&gt; - reject: The proportion of &#39;significant&#39; replications, that is, the</span></span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="co">#&gt;   rejection rate. If the null hypothesis is true, this is the Type I</span></span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a><span class="co">#&gt;   error rate. If the null hypothesis is false, this is the power.</span></span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a><span class="co">#&gt; - r.cilo,r.cihi: The confidence interval of the rejection rate, based</span></span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a><span class="co">#&gt;   on normal approximation.</span></span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a><span class="co">#&gt; - Refer to the tests for the meanings of other columns.</span></span></code></pre></div>
+<p>The estimated power of the test of the product term,
+<code>x:w</code>, is 0.347, with 95% confidence interval [0.301;
+0.394].</p>
+</div>
+</div>
+<div id="moderated-mediation" class="section level1">
+<h1>Moderated mediation</h1>
+<p>Let’s consider a moderated mediation model.</p>
+<div id="specify-the-population-model-and-values" class="section level2">
+<h2>Specify the Population Model and Values</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>mod3 <span class="ot">&lt;-</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="st">m ~ x + w + x:w</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="st">y ~ m + x</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>This model is a mediation model with the <em>a</em>-path,
+<code>m ~ x</code>, moderated by <code>w</code>. As explained before,
+there is no need to use any label nor define and parameters. This will
+be handled by the test function to be used.</p>
+<p>This is the syntax for the population values:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>mod3_es <span class="ot">&lt;-</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="st">.beta.: s</span></span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="st">m ~ x: m</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="st">y ~ m: m</span></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a><span class="st">m ~ x:w: s</span></span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>Please refer to <a href="#pop_es_xw">the previous section</a> on
+setting up this syntax.</p>
+</div>
+<div id="call-power4test-to-check-the-model-2" class="section level2">
+<h2>Call <code>power4test()</code> to Check the Model</h2>
+<p>We check the model first:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">2</span>,</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                   <span class="at">model =</span> mod3,</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>                   <span class="at">pop_es =</span> mod3_es,</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>                   <span class="at">n =</span> <span class="dv">50000</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>                   <span class="at">iseed =</span> <span class="dv">1234</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">print</span>(out3,</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>      <span class="at">data_long =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt; ====================== Model Information ======================</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; == Model on Factors/Variables ==</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="co">#&gt; m ~ x + w + x:w</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt; == Model on Variables/Indicators ==</span></span>
+<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a><span class="co">#&gt; m ~ x + w + x:w</span></span>
+<span id="cb21-14"><a href="#cb21-14" tabindex="-1"></a><span class="co">#&gt; y ~ m + x</span></span>
+<span id="cb21-15"><a href="#cb21-15" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-16"><a href="#cb21-16" tabindex="-1"></a><span class="co">#&gt; ====== Population Values ======</span></span>
+<span id="cb21-17"><a href="#cb21-17" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-18"><a href="#cb21-18" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb21-19"><a href="#cb21-19" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb21-20"><a href="#cb21-20" tabindex="-1"></a><span class="co">#&gt;   m ~                        </span></span>
+<span id="cb21-21"><a href="#cb21-21" tabindex="-1"></a><span class="co">#&gt;     x                 0.300  </span></span>
+<span id="cb21-22"><a href="#cb21-22" tabindex="-1"></a><span class="co">#&gt;     w                 0.100  </span></span>
+<span id="cb21-23"><a href="#cb21-23" tabindex="-1"></a><span class="co">#&gt;     x:w               0.050  </span></span>
+<span id="cb21-24"><a href="#cb21-24" tabindex="-1"></a><span class="co">#&gt;   y ~                        </span></span>
+<span id="cb21-25"><a href="#cb21-25" tabindex="-1"></a><span class="co">#&gt;     m                 0.300  </span></span>
+<span id="cb21-26"><a href="#cb21-26" tabindex="-1"></a><span class="co">#&gt;     x                 0.100  </span></span>
+<span id="cb21-27"><a href="#cb21-27" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-28"><a href="#cb21-28" tabindex="-1"></a><span class="co">#&gt; Covariances:</span></span>
+<span id="cb21-29"><a href="#cb21-29" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb21-30"><a href="#cb21-30" tabindex="-1"></a><span class="co">#&gt;   x ~~                       </span></span>
+<span id="cb21-31"><a href="#cb21-31" tabindex="-1"></a><span class="co">#&gt;     w                 0.000  </span></span>
+<span id="cb21-32"><a href="#cb21-32" tabindex="-1"></a><span class="co">#&gt;     x:w               0.000  </span></span>
+<span id="cb21-33"><a href="#cb21-33" tabindex="-1"></a><span class="co">#&gt;   w ~~                       </span></span>
+<span id="cb21-34"><a href="#cb21-34" tabindex="-1"></a><span class="co">#&gt;     x:w               0.000  </span></span>
+<span id="cb21-35"><a href="#cb21-35" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-36"><a href="#cb21-36" tabindex="-1"></a><span class="co">#&gt; Variances:</span></span>
+<span id="cb21-37"><a href="#cb21-37" tabindex="-1"></a><span class="co">#&gt;                    Population</span></span>
+<span id="cb21-38"><a href="#cb21-38" tabindex="-1"></a><span class="co">#&gt;    .m                 0.898  </span></span>
+<span id="cb21-39"><a href="#cb21-39" tabindex="-1"></a><span class="co">#&gt;    .y                 0.881  </span></span>
+<span id="cb21-40"><a href="#cb21-40" tabindex="-1"></a><span class="co">#&gt;     x                 1.000  </span></span>
+<span id="cb21-41"><a href="#cb21-41" tabindex="-1"></a><span class="co">#&gt;     w                 1.000  </span></span>
+<span id="cb21-42"><a href="#cb21-42" tabindex="-1"></a><span class="co">#&gt;     x:w               1.000  </span></span>
+<span id="cb21-43"><a href="#cb21-43" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-44"><a href="#cb21-44" tabindex="-1"></a><span class="co">#&gt; (Computing indirect effects for 1 paths ...)</span></span>
+<span id="cb21-45"><a href="#cb21-45" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-46"><a href="#cb21-46" tabindex="-1"></a><span class="co">#&gt; (Computing conditional effects for 2 paths ...)</span></span>
+<span id="cb21-47"><a href="#cb21-47" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-48"><a href="#cb21-48" tabindex="-1"></a><span class="co">#&gt; == Population Conditional/Indirect Effect(s) ==</span></span>
+<span id="cb21-49"><a href="#cb21-49" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-50"><a href="#cb21-50" tabindex="-1"></a><span class="co">#&gt; == Effect(s) ==</span></span>
+<span id="cb21-51"><a href="#cb21-51" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-52"><a href="#cb21-52" tabindex="-1"></a><span class="co">#&gt;          ind</span></span>
+<span id="cb21-53"><a href="#cb21-53" tabindex="-1"></a><span class="co">#&gt; x -&gt; y 0.100</span></span>
+<span id="cb21-54"><a href="#cb21-54" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-55"><a href="#cb21-55" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the effect(s).</span></span>
+<span id="cb21-56"><a href="#cb21-56" tabindex="-1"></a><span class="co">#&gt;  </span></span>
+<span id="cb21-57"><a href="#cb21-57" tabindex="-1"></a><span class="co">#&gt; == Conditional indirect effects ==</span></span>
+<span id="cb21-58"><a href="#cb21-58" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-59"><a href="#cb21-59" tabindex="-1"></a><span class="co">#&gt;  Path: x -&gt; m -&gt; y</span></span>
+<span id="cb21-60"><a href="#cb21-60" tabindex="-1"></a><span class="co">#&gt;  Conditional on moderator(s): w</span></span>
+<span id="cb21-61"><a href="#cb21-61" tabindex="-1"></a><span class="co">#&gt;  Moderator(s) represented by: w</span></span>
+<span id="cb21-62"><a href="#cb21-62" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-63"><a href="#cb21-63" tabindex="-1"></a><span class="co">#&gt;       [w] (w)   ind   m~x   y~m</span></span>
+<span id="cb21-64"><a href="#cb21-64" tabindex="-1"></a><span class="co">#&gt; 1 M+1.0SD   1 0.105 0.350 0.300</span></span>
+<span id="cb21-65"><a href="#cb21-65" tabindex="-1"></a><span class="co">#&gt; 2 Mean      0 0.090 0.300 0.300</span></span>
+<span id="cb21-66"><a href="#cb21-66" tabindex="-1"></a><span class="co">#&gt; 3 M-1.0SD  -1 0.075 0.250 0.300</span></span>
+<span id="cb21-67"><a href="#cb21-67" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-68"><a href="#cb21-68" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the conditional indirect effects.</span></span>
+<span id="cb21-69"><a href="#cb21-69" tabindex="-1"></a><span class="co">#&gt;  - &#39;m~x&#39;,&#39;y~m&#39; is/are the path coefficient(s) along the path conditional</span></span>
+<span id="cb21-70"><a href="#cb21-70" tabindex="-1"></a><span class="co">#&gt;    on the moderator(s).</span></span>
+<span id="cb21-71"><a href="#cb21-71" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-72"><a href="#cb21-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-73"><a href="#cb21-73" tabindex="-1"></a><span class="co">#&gt; == Conditional indirect effects ==</span></span>
+<span id="cb21-74"><a href="#cb21-74" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-75"><a href="#cb21-75" tabindex="-1"></a><span class="co">#&gt;  Path: w -&gt; m -&gt; y</span></span>
+<span id="cb21-76"><a href="#cb21-76" tabindex="-1"></a><span class="co">#&gt;  Conditional on moderator(s): x</span></span>
+<span id="cb21-77"><a href="#cb21-77" tabindex="-1"></a><span class="co">#&gt;  Moderator(s) represented by: x</span></span>
+<span id="cb21-78"><a href="#cb21-78" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-79"><a href="#cb21-79" tabindex="-1"></a><span class="co">#&gt;       [x] (x)   ind   m~w   y~m</span></span>
+<span id="cb21-80"><a href="#cb21-80" tabindex="-1"></a><span class="co">#&gt; 1 M+1.0SD   1 0.045 0.150 0.300</span></span>
+<span id="cb21-81"><a href="#cb21-81" tabindex="-1"></a><span class="co">#&gt; 2 Mean      0 0.030 0.100 0.300</span></span>
+<span id="cb21-82"><a href="#cb21-82" tabindex="-1"></a><span class="co">#&gt; 3 M-1.0SD  -1 0.015 0.050 0.300</span></span>
+<span id="cb21-83"><a href="#cb21-83" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-84"><a href="#cb21-84" tabindex="-1"></a><span class="co">#&gt;  - The &#39;ind&#39; column shows the conditional indirect effects.</span></span>
+<span id="cb21-85"><a href="#cb21-85" tabindex="-1"></a><span class="co">#&gt;  - &#39;m~w&#39;,&#39;y~m&#39; is/are the path coefficient(s) along the path conditional</span></span>
+<span id="cb21-86"><a href="#cb21-86" tabindex="-1"></a><span class="co">#&gt;    on the moderator(s).</span></span>
+<span id="cb21-87"><a href="#cb21-87" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-88"><a href="#cb21-88" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-89"><a href="#cb21-89" tabindex="-1"></a><span class="co">#&gt; ======================= Data Information =======================</span></span>
+<span id="cb21-90"><a href="#cb21-90" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-91"><a href="#cb21-91" tabindex="-1"></a><span class="co">#&gt; Number of Replications:  2 </span></span>
+<span id="cb21-92"><a href="#cb21-92" tabindex="-1"></a><span class="co">#&gt; Sample Sizes:  50000 </span></span>
+<span id="cb21-93"><a href="#cb21-93" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-94"><a href="#cb21-94" tabindex="-1"></a><span class="co">#&gt; ==== Descriptive Statistics ====</span></span>
+<span id="cb21-95"><a href="#cb21-95" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-96"><a href="#cb21-96" tabindex="-1"></a><span class="co">#&gt;     vars     n mean sd skew kurtosis se</span></span>
+<span id="cb21-97"><a href="#cb21-97" tabindex="-1"></a><span class="co">#&gt; m      1 1e+05    0  1 0.03     0.03  0</span></span>
+<span id="cb21-98"><a href="#cb21-98" tabindex="-1"></a><span class="co">#&gt; y      2 1e+05    0  1 0.01    -0.01  0</span></span>
+<span id="cb21-99"><a href="#cb21-99" tabindex="-1"></a><span class="co">#&gt; x      3 1e+05    0  1 0.00    -0.02  0</span></span>
+<span id="cb21-100"><a href="#cb21-100" tabindex="-1"></a><span class="co">#&gt; w      4 1e+05    0  1 0.00     0.01  0</span></span>
+<span id="cb21-101"><a href="#cb21-101" tabindex="-1"></a><span class="co">#&gt; x:w    5 1e+05    0  1 0.04     5.92  0</span></span>
+<span id="cb21-102"><a href="#cb21-102" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-103"><a href="#cb21-103" tabindex="-1"></a><span class="co">#&gt; ===== Parameter Estimates Based on All 2 Samples Combined =====</span></span>
+<span id="cb21-104"><a href="#cb21-104" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-105"><a href="#cb21-105" tabindex="-1"></a><span class="co">#&gt; Total Sample Size: 100000 </span></span>
+<span id="cb21-106"><a href="#cb21-106" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-107"><a href="#cb21-107" tabindex="-1"></a><span class="co">#&gt; ==== Standardized Estimates ====</span></span>
+<span id="cb21-108"><a href="#cb21-108" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-109"><a href="#cb21-109" tabindex="-1"></a><span class="co">#&gt; Variances and error variances omitted.</span></span>
+<span id="cb21-110"><a href="#cb21-110" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-111"><a href="#cb21-111" tabindex="-1"></a><span class="co">#&gt; Regressions:</span></span>
+<span id="cb21-112"><a href="#cb21-112" tabindex="-1"></a><span class="co">#&gt;                     est.std</span></span>
+<span id="cb21-113"><a href="#cb21-113" tabindex="-1"></a><span class="co">#&gt;   m ~                      </span></span>
+<span id="cb21-114"><a href="#cb21-114" tabindex="-1"></a><span class="co">#&gt;     x                 0.303</span></span>
+<span id="cb21-115"><a href="#cb21-115" tabindex="-1"></a><span class="co">#&gt;     w                 0.099</span></span>
+<span id="cb21-116"><a href="#cb21-116" tabindex="-1"></a><span class="co">#&gt;     x:w               0.052</span></span>
+<span id="cb21-117"><a href="#cb21-117" tabindex="-1"></a><span class="co">#&gt;   y ~                      </span></span>
+<span id="cb21-118"><a href="#cb21-118" tabindex="-1"></a><span class="co">#&gt;     m                 0.299</span></span>
+<span id="cb21-119"><a href="#cb21-119" tabindex="-1"></a><span class="co">#&gt;     x                 0.098</span></span>
+<span id="cb21-120"><a href="#cb21-120" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-121"><a href="#cb21-121" tabindex="-1"></a><span class="co">#&gt; Covariances:</span></span>
+<span id="cb21-122"><a href="#cb21-122" tabindex="-1"></a><span class="co">#&gt;                     est.std</span></span>
+<span id="cb21-123"><a href="#cb21-123" tabindex="-1"></a><span class="co">#&gt;   x ~~                     </span></span>
+<span id="cb21-124"><a href="#cb21-124" tabindex="-1"></a><span class="co">#&gt;     w                 0.003</span></span>
+<span id="cb21-125"><a href="#cb21-125" tabindex="-1"></a><span class="co">#&gt;     x:w              -0.001</span></span>
+<span id="cb21-126"><a href="#cb21-126" tabindex="-1"></a><span class="co">#&gt;   w ~~                     </span></span>
+<span id="cb21-127"><a href="#cb21-127" tabindex="-1"></a><span class="co">#&gt;     x:w               0.008</span></span>
+<span id="cb21-128"><a href="#cb21-128" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-129"><a href="#cb21-129" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-130"><a href="#cb21-130" tabindex="-1"></a><span class="co">#&gt; ==================== Extra Element(s) Found ====================</span></span>
+<span id="cb21-131"><a href="#cb21-131" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-132"><a href="#cb21-132" tabindex="-1"></a><span class="co">#&gt; - fit</span></span>
+<span id="cb21-133"><a href="#cb21-133" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-134"><a href="#cb21-134" tabindex="-1"></a><span class="co">#&gt; === Element(s) of the First Dataset ===</span></span>
+<span id="cb21-135"><a href="#cb21-135" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-136"><a href="#cb21-136" tabindex="-1"></a><span class="co">#&gt; ============ &lt;fit&gt; ============</span></span>
+<span id="cb21-137"><a href="#cb21-137" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-138"><a href="#cb21-138" tabindex="-1"></a><span class="co">#&gt; lavaan 0.6-19 ended normally after 1 iteration</span></span>
+<span id="cb21-139"><a href="#cb21-139" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-140"><a href="#cb21-140" tabindex="-1"></a><span class="co">#&gt;   Estimator                                         ML</span></span>
+<span id="cb21-141"><a href="#cb21-141" tabindex="-1"></a><span class="co">#&gt;   Optimization method                           NLMINB</span></span>
+<span id="cb21-142"><a href="#cb21-142" tabindex="-1"></a><span class="co">#&gt;   Number of model parameters                         7</span></span>
+<span id="cb21-143"><a href="#cb21-143" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-144"><a href="#cb21-144" tabindex="-1"></a><span class="co">#&gt;   Number of observations                         50000</span></span>
+<span id="cb21-145"><a href="#cb21-145" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb21-146"><a href="#cb21-146" tabindex="-1"></a><span class="co">#&gt; Model Test User Model:</span></span>
+<span id="cb21-147"><a href="#cb21-147" tabindex="-1"></a><span class="co">#&gt;                                                       </span></span>
+<span id="cb21-148"><a href="#cb21-148" tabindex="-1"></a><span class="co">#&gt;   Test statistic                                 0.007</span></span>
+<span id="cb21-149"><a href="#cb21-149" tabindex="-1"></a><span class="co">#&gt;   Degrees of freedom                                 2</span></span>
+<span id="cb21-150"><a href="#cb21-150" tabindex="-1"></a><span class="co">#&gt;   P-value (Chi-square)                           0.997</span></span></code></pre></div>
+<p>The population values and the estimates based on 5 × 10<sup>4</sup>
+by 2 or 100000 are what we expect.</p>
+</div>
+<div id="call-power4test-to-test-the-moderated-mediation-effect" class="section level2">
+<h2>Call <code>power4test()</code> to Test The Moderated Mediation
+Effect</h2>
+<p>To estimate the power of a moderated mediation effect, we can test
+the <em>index of moderated mediation</em> <span class="citation">(Hayes,
+2015)</span>. In this example, it is the product of the coefficient
+<code>m ~ x:w</code> and the coefficient <code>y ~ m</code>. This can be
+done by the test function <code>test_index_of_mome()</code>, provided by
+<code>power4mome</code>. Again, Monte Carlo confidence interval is
+used.</p>
+<p>Let’s estimate the power when sample size is 100.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>out3 <span class="ot">&lt;-</span> <span class="fu">power4test</span>(<span class="at">nrep =</span> <span class="dv">400</span>,</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>                   <span class="at">model =</span> mod3,</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>                   <span class="at">pop_es =</span> mod3_es,</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>                   <span class="at">n =</span> <span class="dv">100</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>                   <span class="at">R =</span> <span class="dv">2000</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>                   <span class="at">ci_type =</span> <span class="st">&quot;mc&quot;</span>,</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>                   <span class="at">test_fun =</span> test_index_of_mome,</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>                   <span class="at">test_args =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="st">&quot;x&quot;</span>,</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>                                    <span class="at">m =</span> <span class="st">&quot;m&quot;</span>,</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>                                    <span class="at">y =</span> <span class="st">&quot;y&quot;</span>,</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>                                    <span class="at">w =</span> <span class="st">&quot;w&quot;</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" tabindex="-1"></a>                                    <span class="at">mc_ci =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb22-13"><a href="#cb22-13" tabindex="-1"></a>                   <span class="at">iseed =</span> <span class="dv">1234</span>,</span>
+<span id="cb22-14"><a href="#cb22-14" tabindex="-1"></a>                   <span class="at">parallel =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The call is similar to the one used in <a href="#med_power">testing
+mediation</a>.</p>
+<p>This is the new argument used:</p>
+<ul>
+<li><code>test_fun</code>: It is set to
+<code>test_index_of_mome()</code> in this example. This function is
+similar to <code>test_indirect_effect()</code>, with one more argument,
+<code>w</code>, for the moderator. Although this example has only one
+mediator, it support any number of mediators along a path.<a href="#fn8" class="footnote-ref" id="fnref8"><sup>8</sup></a></li>
+</ul>
+</div>
+<div id="compute-the-power-2" class="section level2">
+<h2>Compute the Power</h2>
+<p>We can ues <code>rejection_rates()</code> again to estimate the
+power:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>out3_power <span class="ot">&lt;-</span> <span class="fu">rejection_rates</span>(out3)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>out3_power</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="co">#&gt; [test]: test_index_of_mome: x-&gt;m-&gt;y, moderated by w </span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; [test_label]: Test </span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt;     est   p.v reject r.cilo r.cihi</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="co">#&gt; 1 0.016 1.000  0.055  0.033  0.077</span></span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="co">#&gt; Notes:</span></span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a><span class="co">#&gt; - p.v: The proportion of valid replications.</span></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a><span class="co">#&gt; - est: The mean of the estimates in a test across replications.</span></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="co">#&gt; - reject: The proportion of &#39;significant&#39; replications, that is, the</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a><span class="co">#&gt;   rejection rate. If the null hypothesis is true, this is the Type I</span></span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a><span class="co">#&gt;   error rate. If the null hypothesis is false, this is the power.</span></span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a><span class="co">#&gt; - r.cilo,r.cihi: The confidence interval of the rejection rate, based</span></span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a><span class="co">#&gt;   on normal approximation.</span></span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a><span class="co">#&gt; - Refer to the tests for the meanings of other columns.</span></span></code></pre></div>
+<p>The estimated power of the test of moderated mediation effect,
+conducted by a test of the index of moderated mediation, is 0.055, 95%
+confidence interval [0.033; 0.077].</p>
+<p>Unlike the previous example on moderation tested by regression,
+estimating the power of Monte Carlo confidence intervals is
+substantially slower. However, this is necessary because Monte Carlo or
+nonparametric bootstrapping confidence interval is the test usually used
+in moderated mediation (and mediation).</p>
+</div>
+</div>
+<div id="new_n" class="section level1">
+<h1>Repeating a Simulation With A Different Sample Size</h1>
+<p>The function <code>power4test()</code> also supports <em>redoing</em>
+an analysis using a new value for the sample size (or population effect
+sizes set to <code>pop_es</code>). Simply</p>
+<ul>
+<li><p>set the output of <code>power4test</code> as the first argument,
+and</p></li>
+<li><p>set the <em>new value</em> for <code>n</code>.</p></li>
+</ul>
+<p>For example, we can repeat the simulation for the test of moderation
+<a href="#pop_es_xw">above</a>, but for a sample size of 200. We simply
+call <code>power4test()</code> again, set the previous output
+(<code>out2</code> in the example for moderation) as the first argument,
+and set <code>n</code> to a new value (200 in this example):</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>out2_new_n <span class="ot">&lt;-</span> <span class="fu">power4test</span>(out2,</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>                         <span class="at">n =</span> <span class="dv">200</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>out2_new_n</span></code></pre></div>
+<p>This is the estimated power when the sample size is 200.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>out2_new_n_reject <span class="ot">&lt;-</span> <span class="fu">rejection_rates</span>(out2_new_n)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>out2_new_n_reject</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&gt; [test]: test_moderation: CIs  </span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; [test_label]: y~x:w </span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&gt;     est   p.v reject r.cilo r.cihi</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&gt; 1 0.148 1.000  0.527  0.479  0.576</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&gt; Notes:</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="co">#&gt; - p.v: The proportion of valid replications.</span></span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a><span class="co">#&gt; - est: The mean of the estimates in a test across replications.</span></span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a><span class="co">#&gt; - reject: The proportion of &#39;significant&#39; replications, that is, the</span></span>
+<span id="cb25-11"><a href="#cb25-11" tabindex="-1"></a><span class="co">#&gt;   rejection rate. If the null hypothesis is true, this is the Type I</span></span>
+<span id="cb25-12"><a href="#cb25-12" tabindex="-1"></a><span class="co">#&gt;   error rate. If the null hypothesis is false, this is the power.</span></span>
+<span id="cb25-13"><a href="#cb25-13" tabindex="-1"></a><span class="co">#&gt; - r.cilo,r.cihi: The confidence interval of the rejection rate, based</span></span>
+<span id="cb25-14"><a href="#cb25-14" tabindex="-1"></a><span class="co">#&gt;   on normal approximation.</span></span>
+<span id="cb25-15"><a href="#cb25-15" tabindex="-1"></a><span class="co">#&gt; - Refer to the tests for the meanings of other columns.</span></span></code></pre></div>
+<p>The estimated power is 0.527, 95% confidence interval [0.479; 0.576],
+when the sample size is 200.</p>
+<p>This technique can be repeated to find the required sample size for a
+target power, and can be used for all the other scenarios covered above,
+such as mediation and moderated mediation.</p>
+</div>
+<div id="find-the-sample-size-with-the-desired-power" class="section level1">
+<h1>Find the Sample Size With The Desired Power</h1>
+<p>There are several more efficient ways to find the sample size with
+the desired power.</p>
+<div id="using-n_region_from_power" class="section level2">
+<h2>Using <code>n_region_from_power()</code></h2>
+<p>The function <code>n_region_from_power()</code> can be used to find
+the <em>region</em> of sample sizes likely to have the desired power. If
+the default settings are to be used, then it can be called directly on
+the output of <code>power4test()</code>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>out2_region <span class="ot">&lt;-</span> <span class="fu">n_region_from_power</span>(out2,</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>                                   <span class="at">seed =</span> <span class="dv">2345</span>)</span></code></pre></div>
+<p>This is the recommended way for sample size planning, when there is
+no predetermined range of sample sizes.</p>
+<p>See <a href="https://sfcheung.github.io/power4mome/articles/">the
+templates</a> for examples on using <code>n_region_from_power()</code>
+for common models.</p>
+</div>
+<div id="using-power4test_by_n" class="section level2">
+<h2>Using <code>power4test_by_n()</code></h2>
+<p>The function <code>power4test_by_n()</code> can be used To estimate
+the power for a sequence of sample sizes. For example, we can estimate
+the power in the moderation model above for these sample sizes: 250,
+300, 350, 400.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>out2_several_ns <span class="ot">&lt;-</span> <span class="fu">power4test_by_n</span>(out2,</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>                                   <span class="at">n =</span> <span class="fu">c</span>(<span class="dv">250</span>, <span class="dv">300</span>, <span class="dv">350</span>, <span class="dv">400</span>),</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>                                   <span class="at">by_seed =</span> <span class="dv">4567</span>)</span></code></pre></div>
+<p>The first argument is the output of <code>power4test()</code> for an
+arbitrary sample size.</p>
+<p>The argument <code>n</code> is a numeric vector of sample sizes to
+examine.</p>
+<p>The argument <code>by_seed</code>, if set to an integer, try to make
+the results reproducible.</p>
+<p>The call will take some times to run because it is equivalent to
+calling <code>power4test()</code> once for each sample size.</p>
+<p>The rejection rates for each sample size can be retrieved by
+<code>rejection_rates()</code> too:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">rejection_rates</span>(out2_several_ns)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&gt; [test]: test_moderation: CIs  </span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="co">#&gt; [test_label]: y~x:w </span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="co">#&gt;     n   est   p.v reject r.cilo r.cihi</span></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co">#&gt; 1 250 0.149 1.000  0.660  0.614  0.706</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="co">#&gt; 2 300 0.150 1.000  0.733  0.689  0.776</span></span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a><span class="co">#&gt; 3 350 0.151 1.000  0.810  0.772  0.848</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="co">#&gt; 4 400 0.150 1.000  0.850  0.815  0.885</span></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a><span class="co">#&gt; Notes:</span></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a><span class="co">#&gt; - n: The sample size in a trial.</span></span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a><span class="co">#&gt; - p.v: The proportion of valid replications.</span></span>
+<span id="cb28-12"><a href="#cb28-12" tabindex="-1"></a><span class="co">#&gt; - est: The mean of the estimates in a test across replications.</span></span>
+<span id="cb28-13"><a href="#cb28-13" tabindex="-1"></a><span class="co">#&gt; - reject: The proportion of &#39;significant&#39; replications, that is, the</span></span>
+<span id="cb28-14"><a href="#cb28-14" tabindex="-1"></a><span class="co">#&gt;   rejection rate. If the null hypothesis is true, this is the Type I</span></span>
+<span id="cb28-15"><a href="#cb28-15" tabindex="-1"></a><span class="co">#&gt;   error rate. If the null hypothesis is false, this is the power.</span></span>
+<span id="cb28-16"><a href="#cb28-16" tabindex="-1"></a><span class="co">#&gt; - r.cilo,r.cihi: The confidence interval of the rejection rate, based</span></span>
+<span id="cb28-17"><a href="#cb28-17" tabindex="-1"></a><span class="co">#&gt;   on normal approximation.</span></span>
+<span id="cb28-18"><a href="#cb28-18" tabindex="-1"></a><span class="co">#&gt; - Refer to the tests for the meanings of other columns.</span></span></code></pre></div>
+<p>The results show that, to have a power of about .800 to detect the
+moderation effect, a sample size of about 350 is needed.</p>
+<p>This approach is used when the range of sample sizes has already been
+decided and the levels of power are needed to determine the final sample
+size.</p>
+<p>Please refer to the help page of <code>power4test_by_n()</code> for
+other examples.</p>
+</div>
+<div id="using-x_from_power" class="section level2">
+<h2>Using <code>x_from_power()</code></h2>
+<p>The function <code>x_from_power()</code> can be used to
+systematically search within an interval the sample size with the target
+power. This takes longer to run but, instead of manually trying
+different sample size, this function do the search automatically.</p>
+<p>This approach can be used when the goal is to find the probable
+minimum or maximum sample size with the desired level of power. The
+first approach, using <code>n_region_from_power()</code>, simply uses
+this approach twice to find the region of sample sizes.</p>
+<p>See <a href="https://sfcheung.github.io/power4mome/articles/x_from_power_for_n.html">this
+article</a> for an illustration of how to use
+<code>x_from_power()</code>.</p>
+</div>
+</div>
+<div id="other-advanced-features" class="section level1">
+<h1>Other Advanced Features</h1>
+<p>This brief illustration only covers the basic features of
+<code>power4mome</code>. These are other advanced features to be covered
+in other articles:</p>
+<ul>
+<li><p>There is no inherent restriction on the form of the model.
+Typical models that can be specified in <code>lavaan</code> model syntax
+can be the population model, although there may be special models in
+which <code>power4test</code> does not yet support.</p></li>
+<li><p>The population model can be a model with latent factors and
+indicators. Nevertheless, users can specify only the relation among the
+factors. There is no need to include indicators in the model syntax, and
+also no need to manually specify the factor loadings. The number of
+indicators for each factor and the factor loadings are set by the
+argument <code>number_of_indicators</code> and <code>reliability</code>
+(see the help page of <code>sim_data()</code> on how to set them). The
+model syntax used to fit to the data will automatically include the
+indicators. An introduction can be found in
+<code>vignette(&quot;power4test_latent_mediation&quot;)</code>. Examples can be
+found in <a href="https://sfcheung.github.io/power4mome/articles/">templates</a> for
+models with latent variables.</p></li>
+<li><p>Though not illustrated above, estimating the power of tests
+conducted by nonparametric bootstrapping is supported, although it will
+take longer to run.</p></li>
+<li><p>Although this package focuses on moderation, mediation, and
+moderated mediation, in principle, the power of any test can be
+estimated, as long as a test function for <code>test_fun</code> is
+available. Some other functions are provided with
+<code>power4mome</code> (e.g., <code>test_parameters()</code> for
+testing all free model parameters). See the help page of
+<code>do_test()</code> on how to write a function to do a test not
+available in <code>power4mome</code>.</p></li>
+<li><p>When estimating power, usually the population model is fitted to
+the data. However, it is possible to fit any other model to the
+generated data. This can be done by using the argument
+<code>fit_model_args</code> to set the argument <code>model</code> of
+<code>fit_model()</code>.</p></li>
+<li><p>Preliminary support for multigroup model is available. See the
+help pages of <code>ptable_pop()</code> and <code>pop_es_yaml()</code>
+on how to specify the population value syntax. Functions will be added
+for tests relevant to multigroup models (e.g., testing the between-group
+difference in an indirect effect).</p></li>
+<li><p>Although we illustrated only rerunning an analysis with a new
+sample size (<code>n</code>), it is also possible to rerun an analysis
+using a new population value for a parameter. This can be done by using
+the previous output of <code>power4test()</code> as the first argument,
+and setting only <code>pop_es</code> to a named vector:</p></li>
+</ul>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>out2_new_xw <span class="ot">&lt;-</span> <span class="fu">power4test</span>(out2,</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>                          <span class="at">pop_es =</span> <span class="fu">c</span>(<span class="st">&quot;y ~ x:w&quot;</span> <span class="ot">=</span> <span class="st">&quot;.30&quot;</span>))</span></code></pre></div>
+<ul>
+<li>Basic support for generating nonnormal variables, including
+dichotomous variables is available. See the argument <code>x_fun</code>
+of <code>power4test()</code> for details.</li>
+</ul>
+</div>
+<div id="limitations" class="section level1">
+<h1>Limitations</h1>
+<ul>
+<li>Monte Carlo confidence interval is not supported for models fitted
+by <code>lm()</code> (regression). To estimate power of testing
+mediation or moderated mediation effects in models fitted by
+<code>lm()</code>, <code>ci_type = &quot;boot&quot;</code> is needed.</li>
+</ul>
+</div>
+<div id="references" class="section level1 unnumbered">
+<h1 class="unnumbered">References</h1>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-bohrnstedt_exact_1969" class="csl-entry">
+Bohrnstedt, G. W., &amp; Goldberger, A. S. (1969). On the exact
+covariance of products of random variables. <em>Journal of the American
+Statistical Association</em>, <em>64</em>(328), 1439–1442. <a href="https://doi.org/10.2307/2286081">https://doi.org/10.2307/2286081</a>
+</div>
+<div id="ref-cheung_manymome_2024" class="csl-entry">
+Cheung, S. F., &amp; Cheung, S.-H. (2024). <em>Manymome</em>:
+<span>An</span> <span>R</span> package for computing the indirect
+effects, conditional effects, and conditional indirect effects,
+standardized or unstandardized, and their bootstrap confidence
+intervals, in many (though not all) models. <em>Behavior Research
+Methods</em>, <em>56</em>(5), 4862–4882. <a href="https://doi.org/10.3758/s13428-023-02224-z">https://doi.org/10.3758/s13428-023-02224-z</a>
+</div>
+<div id="ref-hayes_index_2015" class="csl-entry">
+Hayes, A. F. (2015). An index and test of linear moderated mediation.
+<em>Multivariate Behavioral Research</em>, <em>50</em>(1), 1–22. <a href="https://doi.org/10.1080/00273171.2014.962683">https://doi.org/10.1080/00273171.2014.962683</a>
+</div>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr />
+<ol>
+<li id="fn1"><p> Users can specify the values directly if necessary.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>The functions used are
+<code>parallel::clusterSetRNGStream()</code> for parallel processing,
+and <code>set.seed()</code> for serial processing.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>They are implemented by <code>manymome::do_mc()</code>
+and <code>manymome::do_boot()</code>, respectively.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>The test is implemented by
+<code>manymome::indirect()</code>.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>The number of cores is determined automatically but can
+be set directly by the <code>ncores</code> argument.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p>See the help page of <code>fit_model()</code> on other
+available arguments.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>The test name has <code>CIs</code> in it but this is
+equivalent to using the <em>t</em> test when the model is fitted by
+<code>lm()</code>.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
+<li id="fn8"><p>The test is implemented by
+<code>manymome::test_index_of_mome()</code>.<a href="#fnref8" class="footnote-back">↩︎</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+#' @title Set Population Values
+#'
+#' @description Return a parameter table
+#' with the population values of selected
+#' parameters.
+#'
+#' @details
+#'
+#' These are the input and output values
+#' for [set_pop()].
+#'
+#' Input:
+#'
+#' - par_es: The effect sizes for selected coefficients
+#'
+#' - es1: Effect sizes for normal coefficients
+#'
+#' - es2: Effect sizes for moderation (product terms)
+#'
+#' Output:
+#'
+#' - A lhs-op-rhs data frame with population values (pop)
+#'
+#' @return
+#' A data frame with these columns: `lhs`,
+#' `op`, `rhs`, `pop`, and `es`. The first
+#' three columns correspond to those in
+#' a `lavaan` parameter table. The column
+#' `pop` stores the population values.
+#' The column `es` stores the original
+#' labels, for reference.
+#'
+#' @param par_es A named character
+#' vector. The names are `lavaan` for
+#' the seleted parameters. For example,
+#' `m ~ x` denotes the path from `x` to
+#' `m`. Can specify more than one
+#' parameters. For example, `y ~ m + x`
+#' denotes the two paths from `m` and
+#' `x` to `y`. The value is the label
+#' for the effect size: `s` for small,
+#' `m` for medium, and `l` for large.
+#' There are two possible values, one
+#' set, `es1`, for correlations and
+#' regression coefficients, the other
+#' set, `es2`, for standardized
+#' moderation effect, the coefficients
+#' of a product term.
+#'
+#' @param es1 A named vector to set the
+#' values for each label of the effect
+#' size of correlations and regression
+#' paths.
+#' Default is `c("n" = .00, "nil" = .00, "s" = .10, "m" = .30, "l" = .50)`.
+#'
+#' @param es2 A named vector to set the
+#' values for each label of the effect
+#' size of product term.
+#' Default is `c("n" = .00, "nil" = .00, "s" = .05, "m" = .10, "l" = .15)`.
+#'
+#' @examples
+#' \donttest{
+#' }
+#'
+#' @noRd
+set_pop <- function(par_es,
+                    es1 = c("n" = .00,
+                            "nil" = .00,
+                            "s" = .10,
+                            "m" = .30,
+                            "l" = .50,
+                            "si" = .141,
+                            "mi" = .361,
+                            "li" = .510),
+                    es2 = c("n" = .00,
+                            "nil" = .00,
+                            "s" = .05,
+                            "m" = .10,
+                            "l" = .15),
+                    es_ind = c("si",
+                               "mi",
+                               "li")) {
+
+  # num_comp <- max_num_comp(par_es)
+  # # No longer necessary
+  # # because eval() is used.
+  # es1 <- expand_ind_labels(es1,
+  #                          es_ind = es_ind,
+  #                          num_comp = num_comp)
+  es10 <- es_long(es1)
+  es20 <- es_long(es2)
+  es10_env <- list2env(as.list(es10))
+  es20_env <- list2env(as.list(es20))
+  to_set <- lavaan::lavParseModelString(names(par_es),
+                                        as.data.frame. = TRUE)
+  to_set$pop <- NA
+  for (x in seq_along(par_es)) {
+    is_inter <- isTRUE(grepl(":", to_set$rhs[x], fixed = TRUE))
+    if (is_inter) {
+      y <- try(eval(parse(text = par_es[x]),
+                     envir = es20_env),
+               silent = TRUE)
+      if (inherits(y, "try-error") ||
+          !is.numeric(y)) {
+        to_set[x, "pop"] <- NA
+      } else {
+        to_set[x, "pop"] <- y
+      }
+    } else {
+      y <- try(eval(parse(text = par_es[x]),
+                    envir = es10_env),
+              silent = TRUE)
+      if (inherits(y, "try-error") ||
+          !is.numeric(y)) {
+        # Not needed.
+        # Kept for backward compatibility
+        # Check if it is a component
+        x_i <- strsplit(par_es[x],
+                        "_",
+                        fixed = TRUE)[[1]]
+        x_i_num <- suppressWarnings(as.numeric(x_i))
+        if (is.numeric(x_i_num) &&
+            all(!is.na(x_i_num))) {
+          es_num <- x_i_num[1] ^ (1 / x_i_num[2])
+          to_set[x, "pop"] <- es_num
+        }
+      } else {
+        to_set[x, "pop"] <- y
+      }
+    }
+  }
+  #   y <- match(par_es[x], names(es10))
+  #   if (is.na(y)) {
+  #     es_num <- suppressWarnings(as.numeric(par_es[x]))
+  #     if (!is.na(es_num)) {
+  #       # Effect size specified numerically
+  #       to_set[x, "pop"] <- es_num
+  #     } else {
+  #       # Check if it is a component
+  #       x_i <- strsplit(par_es[x],
+  #                       "_",
+  #                       fixed = TRUE)[[1]]
+  #       x_i_num <- suppressWarnings(as.numeric(x_i))
+  #       if (is.numeric(x_i_num) &&
+  #           all(!is.na(x_i_num))) {
+  #         es_num <- x_i_num[1] ^ (1 / x_i_num[2])
+  #         to_set[x, "pop"] <- es_num
+  #       }
+  #     }
+  #   } else {
+  #     # Effect size label found
+  #     is_inter <- isTRUE(grepl(":", to_set$rhs[x], fixed = TRUE))
+  #     to_set[x, "pop"] <- ifelse(is_inter,
+  #                               es20[y],
+  #                               es10[y])
+  #   }
+  # }
+  to_set$es <- par_es
+  to_set[, c("lhs", "op", "rhs", "pop", "es")]
+}
+
+#' @noRd
+# Input:
+# - A names vector of effect sizes
+# Output:
+# - A expanded named vector with names for negative effects.
+#   E.g., "m" to "-m".
+
+es_long <- function(es) {
+  es10 <- stats::setNames(es,
+                          gsub(".",
+                               "",
+                               names(es),
+                               fixed = TRUE))
+  es10n <- stats::setNames(-1 * es,
+                           paste0("-",
+                                  names(es10)))
+  est1x <- c(es10, es10n)
+  est1x
+}
+
+
+#' @noRd
+# Input:
+# - The effect sizes for selected coefficients
+# Output:
+# - The expanded named vectors
+
+fix_par_es <- function(par_es,
+                       model) {
+  par_es_org <- par_es
+  i <- match(c(".beta.", ".cov."), names(par_es))
+  i_ind <- which(grepl("^.ind.", names(par_es)))
+  i <- c(i, i_ind)
+  par_es_def <- par_es[i]
+  par_es_def <- par_es_def[!is.na(par_es_def)]
+  all_beta_es <- character(0)
+  all_cov_es <- character(0)
+  all_ind_es <- character(0)
+  if (!all(is.na(i))) {
+    par_es <- par_es[-i[!is.na(i)]]
+    ptable <- lavaan::parTable(lavaan::sem(model = model,
+                                           do.fit = FALSE))
+    if (".beta." %in% names(par_es_def)) {
+      all_beta <- ptable[ptable$op == "~", c("lhs", "op", "rhs")]
+      all_beta <- apply(all_beta, 1, paste, collapse = " ")
+      all_beta_es <- rep(par_es_def[".beta."], length(all_beta))
+      names(all_beta_es) <- all_beta
+    }
+    if (".cov." %in% names(par_es_def)) {
+      all_cov <- ptable[ptable$op == "~~", ]
+      all_cov <- all_cov[all_cov$lhs != all_cov$rhs, ]
+      all_cov <- all_cov[all_cov$exo == 1, ]
+      tmp <- lavaan::lavNames(ptable, "ov.interaction")
+      if (length(tmp) > 0) {
+        all_cov <- all_cov[!((all_cov$lhs == tmp) |
+                            (all_cov$rhs == tmp)), ]
+      }
+      all_cov <- all_cov[, c("lhs", "op", "rhs")]
+      all_cov <- apply(all_cov, 1, paste, collapse = " ")
+      all_cov_es <- rep(par_es_def[".cov."], length(all_cov))
+      names(all_cov_es) <- all_cov
+    }
+    if (length(i_ind) > 0) {
+      # Expand to component paths
+      i2 <- which(grepl("^.ind.", names(par_es_def)))
+      par_es_ind <- par_es_def[i2]
+      any_negative <- grepl("^-", trimws(par_es_ind))
+      if (any(any_negative)) {
+        tmp1 <- par_es_ind[any_negative][1]
+        tmp2 <- paste0(names(tmp1), " set to ", tmp1, ".")
+        stop("Cannot set the value of .ind.() to negative value. E.g.,",
+             tmp2)
+      }
+      ind_comp <- sapply(names(par_es_ind),
+                         expand_to_components,
+                         simplify = FALSE,
+                         USE.NAMES = TRUE)
+      if (any(duplicated(unname(unlist(ind_comp))))) {
+        stop("The paths in '.ind.' cannot overlap.")
+      }
+      tmpfct <- function(x, y) {
+        k <- length(y)
+        out <- rep(x, k)
+        # k indicates the number of component paths
+        out <- paste0("(", out, ")^(1 / ", k, ")")
+        names(out) <- y
+        out
+      }
+      all_ind_es <- mapply(tmpfct,
+                           x = par_es_ind,
+                           y = ind_comp,
+                           USE.NAMES = FALSE,
+                           SIMPLIFY = FALSE)
+      all_ind_es <- unlist(all_ind_es)
+    }
+  }
+  out <- character(0)
+  for (i in seq_along(par_es)) {
+    x_name <- names(par_es[i])
+    tmp1 <- lavaan::lavParseModelString(x_name,
+                                        as.data.frame. = TRUE)
+    tmp2 <- paste(tmp1$lhs,
+                  tmp1$op,
+                  tmp1$rhs)
+    tmp3 <- rep(par_es[i], length(tmp2))
+    names(tmp3) <- tmp2
+    out <- c(out, tmp3)
+  }
+  # Add all_beta_es
+  all_def <- c(all_beta_es, all_cov_es)
+  tmp <- setdiff(names(all_def), names(out))
+  out <- c(out, all_def[tmp])
+
+  # .ind. override other specification
+  if (length(all_ind_es) > 0) {
+    tmp <- setdiff(names(out), names(all_ind_es))
+    out <- c(all_ind_es, out[tmp])
+  }
+
+  out
+}
+
+#' @noRd
+# Copied from another project by the author
+lambda_from_reliability <- function(p = 3,
+                                    omega = .70) {
+  lambda <- sqrt(omega / (p - omega * (p - 1)))
+  lambda
+}
+
+#' @noRd
+# Create a list of par_es for groups
+split_par_es <- function(object) {
+  ngroups <- max(sapply(object,
+                        length,
+                        USE.NAMES = FALSE))
+  for (xx in names(object)) {
+    i <- length(object[[xx]])
+    if (i == 1) {
+      object[[xx]] <- rep(object[[xx]], ngroups)
+    } else if (i != ngroups) {
+      stop("Each element of pop_es must either one element of equal number of elements.")
+    }
+  }
+  i <- seq_len(ngroups)
+  out <- lapply(i, function(x) {
+              sapply(object,
+                     function(y) y[x],
+                     simplify = TRUE)
+            })
+  return(out)
+}
+
+#' @noRd
+# Input:
+# - E.g.,
+#   - ".ind.(x1-> m1->m2->y)"
+# Output:
+# - c("m1~x1", "m2~m1", "y~m2")
+expand_to_components <- function(x,
+                                 pattern = c(l2r = "->",
+                                             r2l = "~")) {
+  x0 <- trimws(gsub("^.ind.", "", x))
+  x1 <- sub("\\(", "", x0)
+  x1 <- sub("\\)$", "", x1)
+  x1 <- trimws(x1)
+  style <- ""
+  tmp <- sapply(pattern,
+                \(x) grepl(x, x1, fixed = TRUE))
+  if (sum(tmp) != 1) {
+    tmp2 <- paste0(pattern, collapse = ", ")
+    stop("Only one style (out of these: ",
+         tmp2,
+         ") can be used.")
+  }
+  pattern_used <- pattern[tmp]
+  style <- names(pattern)[tmp]
+
+  x2 <- strsplit(x1,
+                 pattern_used,
+                 fixed = TRUE)[[1]]
+  x2 <- sapply(x2, trimws)
+  x2a <- x2[-length(x2)]
+  x2b <- x2[-1]
+  out <- switch(style,
+                l2r = paste0(x2b,
+                             " ~ ",
+                             x2a),
+                r2l = paste0(x2a,
+                             " ~ ",
+                             x2b))
+  out
+}
+
+#' @noRd
+# Find the maximum number of component paths
+max_num_comp <- function(x,
+                         num_min = 2) {
+  tmp <- regexpr("_([[:alnum:]]+)$", x)
+  tmp2 <- ifelse(tmp > 0,
+                 substring(x,
+                           tmp + 1),
+                 "")
+  out <- as.numeric(tmp2)
+  out <- out[!is.na(out)]
+  if (length(out) == 0) {
+    return(num_min)
+  }
+  out <- max(out, na.rm = TRUE)
+  out
+}
+
+
+#' @noRd
+# Expand indirect labels.
+# E.g., si to si.1, si.2, si.3.
+# Output
+# - A numeric vector
+expand_ind_labels <- function(x,
+                              es_ind = c("si",
+                                         "mi",
+                                         "li"),
+                              num_comp = 2) {
+  es_ind_x <- x[es_ind]
+  es_ind_x <- es_ind_x[!is.na(es_ind_x)]
+  if (length(es_ind_x) == 0) {
+    return(x)
+  }
+  es_others <- x[setdiff(names(x), es_ind)]
+  es_ind1 <- union(es_ind, names(es_ind_x))
+  tmpfct <- function(xx,
+                     num_comp) {
+    sapply(seq_len(num_comp),
+           function(yy) {
+             z1 <- paste0(xx, "_", yy)
+             z2 <- es_ind_x[xx]^(1 / yy)
+             stats::setNames(z2, z1)
+           },
+           USE.NAMES = FALSE)
+  }
+  out <- lapply(es_ind1,
+                tmpfct,
+                num_comp = num_comp)
+  out <- unlist(out)
+  c(es_others, out)
+}
+
+#' @noRd
+check_valid_es_values <- function(object,
+                                  pop_es_name,
+                                  es_min = -.95,
+                                  es_max =  .95,
+                                  step = 0.05,
+                                  R0 = 2,
+                                  n_std = 5000,
+                                  n = 1000,
+                                  verbose = FALSE,
+                                  ...) {
+  if (!(es_min < es_max)) {
+    stop("'es_min must be less than 'es_max'.")
+  }
+  if (length(seq(es_min, es_max, by = step)) <= 1) {
+    stop("'step' results in only one value between 'es_min' and 'es_max")
+  }
+  work_mode <- ""
+  if (inherits(object, "power4test")) {
+    work_mode <- "power4test"
+  } else if (inherits(object, "ptable_pop")) {
+    work_mode <- "ptable_pop"
+  } else {
+    stop("object not supported")
+  }
+  if (work_mode == "ptable_pop") {
+    if (is.null(attr(object, "standardized"))) {
+      stop("The parameter table is not generated by power4test() or pop_table().")
+    }
+    attr(object, "n_std") <- n_std
+  }
+  if (work_mode == "power4test") {
+    R <- attr(object, "args")$R
+    if (!is.null(R)) {
+      R <- R0
+    }
+  }
+
+  # Assume there is only one region of valid values
+  # TODO:
+  # - Relax this assumption?
+
+  es_to_test <- seq(es_min, es_max, by = step)
+  es_ok <- rep(FALSE, length(es_to_test))
+  names(es_ok) <- sprintf("%4.3f", es_to_test)
+  for (i in seq_along(es_to_test)) {
+    pop_es_i <- as.character(es_to_test[i])
+    names(pop_es_i) <- pop_es_name
+    if (verbose) dput(pop_es_i)
+    chk <- switch(work_mode,
+                  ptable_pop = tryCatch(suppressWarnings(update_ptable_pop(object,
+                                                         pop_es_i)),
+                                        error = function(e) e),
+                  power4test = tryCatch(suppressWarnings(power4test(object,
+                                                                    nrep = 1,
+                                                                    n = n,
+                                                                    pop_es = pop_es_i,
+                                                                    R = R,
+                                                                    n_std = n_std,
+                                                                    do_the_test = FALSE,
+                                                                    parallel = FALSE,
+                                                                    progress = FALSE,
+                                                                    ...)),
+                                        error = function(e) e))
+    if (!inherits(chk, "error")) {
+      es_ok[i] <- TRUE
+    } else {
+      if (verbose) print(chk)
+    }
+  }
+  if (!any(es_ok)) {
+    # No valid values
+    return(c(NA, NA))
+  }
+
+  if (verbose) print(es_ok)
+  es_range <- range(es_to_test[es_ok])
+  es_range
+}
