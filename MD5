@@ -1,9 +1,10 @@
-2571f77bf0009127c55543945477e66c *DESCRIPTION
+9dc81d6ce9086df8c08fcdc1620ec89f *DESCRIPTION
 af08f7631a64e68742db68d1b49155aa *NAMESPACE
-2bfda8600e127ac89f42914651f7cfe9 *NEWS.md
+d8715bb9a776b9d32764fe82f48cf7b8 *NEWS.md
 fb6f71d2c5b4f8191446efb9e558291c *R/auto_cov.R
 7c967ba2768bc333dcff514add419e57 *R/do_test.R
-ee82ff835ee64438da240c28b9c89eb5 *R/fit_model.R
+ddecc916cd73a1769f2a3c9bdaa44ebb *R/fit_model.R
+6293ea204d5e5c99ee681e5c5ae47533 *R/fit_model_helpers.R
 9e30329fd72b10db4016247568f08676 *R/gen_boot.R
 eff926a1a5e099781a8f954be83cba0a *R/gen_mc.R
 8614c91fa9fd0d918758dc3d24755b7f *R/get_rejection_rates.R
@@ -18,7 +19,7 @@ babfa1ce94baf4a77fcb8e654869e118 *R/power_curve.R
 86986cdca8899bcf2257603b5e328e9f *R/power_curve_predict.R
 566aa78fec3b0e9feaf1b55bab5304bb *R/print_helpers.R
 d394fa0941f949b0d525fd818e390ae6 *R/ptable_pop.R
-0ba72eacf1ae1d45be007b75a3fe67b3 *R/ptable_pop_helpers.R
+141c187a86891a97f456fdefdeaa8f53 *R/ptable_pop_helpers.R
 439b1ed1cd2bdbbc10669300fbae521a *R/rbeta_rs.R
 13fefdc1c4fcd755d21586beae920312 *R/rbeta_rs2.R
 053383f542e7f73dffe03f65b3045df7 *R/rbinary_rs.R
@@ -48,7 +49,7 @@ f9997a5e844dd37837800330a10fc02f *R/x_from_power_for_n_helpers.R
 d6c20d9aecb027842be339478048b9e3 *R/x_from_power_for_x_helpers.R
 39495c9d7ab4f4a88eb7122c1fdcc70d *R/x_from_power_for_x_plot.R
 ce2b6e5b8af7c6b74fa3c52131f70afe *R/x_from_power_for_x_summary.R
-766b27297760caf74c6b34ad0c1c4b46 *README.md
+072aa48f2767df5d50c76bec13118b10 *README.md
 9d40159f50a5fc9949cbfe95a2884126 *build/partial.rdb
 fe90e7504c3d943babd9a24cc643cabe *build/vignette.rds
 16592af2c40fef5d44c09ce810dcc9dc *inst/doc/power4mome.Rmd
@@ -200,8 +201,8 @@ a8399edac61396b82a4ad3e11d64a88e *tests/testthat/test-x_from_power_for_n_short_c
 a0a975f7081c5d76257dc3182a42b2e4 *tests/testthat/test-x_from_power_for_n_short_use_by_n.R
 8688deba788cc07d51e3b418b1d41889 *tests/testthat/test-x_from_power_for_n_short_use_x_from.R
 c8b1e53684f7f5b048680512bfb19c74 *tests/testthat/test-x_from_power_helprs_check_solution.R
-8d0d71a58235a05795b927fc4176abf9 *tests/testthat/test_add_cov.R
-0fdfa71684000b5f3a6a780a0ca33333 *tests/testthat/test_add_cov_indicators.R
+4a7a4ad5e4b65bbd5f5eca8d8af4f593 *tests/testthat/test_add_cov.R
+58aab28d93ff37952c48a70b1567d536 *tests/testthat/test_add_cov_indicators.R
 0e2f4c30db87a2e75a93103b2590b3a0 *vignettes/apa.csl
 16592af2c40fef5d44c09ce810dcc9dc *vignettes/power4mome.Rmd
 1bb85ceddfcb6707f4f4b3a653878524 *vignettes/power4mome.Rmd.original
